@@ -1,0 +1,16 @@
+<div style="padding: 20px;">
+  <h2>User Profile</h2>
+
+  @if(username) {
+    <div>
+    <h3>Welcome, {{ username }}!</h3>
+    <p>You have successfully accessed the restricted area.</p>
+    <button (click)="logout()">Logout</button>
+  </div>
+  }
+  @else {
+    <ng-template #loading>
+      <p>Verifying session...</p>
+    </ng-template>
+  }
+</div>
