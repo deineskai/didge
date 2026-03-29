@@ -24,7 +24,7 @@ export class Login {
   onLogin() {
     this.loginError = '';
     this.auth.login(this.loginForm.value).subscribe({
-      next: () => this.router.navigate(['/app/settings']),
+      next: () => this.router.navigate(['/app/recipes/discover']),
       error: () => { this.loginError = 'Invalid username or password'; this.cdr.detectChanges(); }
     });
   }

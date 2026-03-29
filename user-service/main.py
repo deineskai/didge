@@ -61,3 +61,73 @@ def read_users_me(current_user: models.User = Depends(auth.get_current_user)):
         "username": current_user.username,
         "message": "This data came securely from the database!"
     }
+
+
+@app.post("/friends/request")
+def send_friend_request(to_username: str = Body(...), current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    to_user = db.query(models.User).filter(models.User.username == to_username).first()
+    if not to_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    existing_request = db.query(models.FriendRequest).filter(
+        models.FriendRequest.from_user_id == current_user.id,
+        models.FriendRequest.to_user_id == to_user.id
+    ).first()
+    
+    if existing_request:
+        raise HTTPException(status_code=400, detail="Friend request already sent")
+    
+    friend_request = models.FriendRequest(
+        from_user_id=current_user.id,
+        to_user_id=to_user.id,
+        status="pending"
+    )
+    db.add(friend_request)
+    db.commit()
+    return {"message": "Friend request sent successfully"}
+
+
+@app.post("/friends/request/respond")
+def respond_to_friend_request(request_id: int = Body(...), accept: bool = Body(...), current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    friend_request = db.query(models.FriendRequest).filter(models.FriendRequest.id == request_id, models.FriendRequest.to_user_id == current_user.id).first()
+    
+    if not friend_request:
+        raise HTTPException(status_code=404, detail="Friend request not found")
+    
+    friend_request.status = "accepted" if accept else "rejected"
+    db.commit()
+    return {"message": f"Friend request {'accepted' if accept else 'rejected'} successfully"}
+
+@app.get("/friends/requests/incoming")
+def get_friend_requests(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    requests = db.query(models.FriendRequest).filter(models.FriendRequest.to_user_id == current_user.id).filter(models.FriendRequest.status == "pending").all()
+    result = []
+    for r in requests:
+        from_user = db.query(models.User).filter(models.User.id == r.from_user_id).first()
+        result.append({"id": r.id, "from_user_id": r.from_user_id, "from_username": from_user.username if from_user else None, "status": r.status})
+    return result
+
+
+@app.get("/friends/requests/outgoing")
+def get_outgoing_friend_requests(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    requests = db.query(models.FriendRequest).filter(models.FriendRequest.from_user_id == current_user.id).filter(models.FriendRequest.status == "pending").all()
+    return [{"id": r.id, "to_user_id": r.to_user_id, "status": r.status} for r in requests]
+
+
+@app.get("/friends")
+def get_friends(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    accepted_requests = db.query(models.FriendRequest).filter(
+        ((models.FriendRequest.from_user_id == current_user.id) | (models.FriendRequest.to_user_id == current_user.id)) &
+        (models.FriendRequest.status == "accepted")
+    ).all()
+    
+    friend_ids = set()
+    for req in accepted_requests:
+        if req.from_user_id != current_user.id:
+            friend_ids.add(req.from_user_id)
+        if req.to_user_id != current_user.id:
+            friend_ids.add(req.to_user_id)
+    
+    friends = db.query(models.User).filter(models.User.id.in_(friend_ids)).all()
+    return [{"id": f.id, "username": f.username} for f in friends]
+

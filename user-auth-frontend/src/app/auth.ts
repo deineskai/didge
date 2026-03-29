@@ -41,6 +41,22 @@ export class Auth {
     }
   }
 
+  getFriends() {
+    return this.http.get<any[]>(`${this.apiUrl}/friends`);
+  }
+
+  getIncomingRequests() {
+    return this.http.get<any[]>(`${this.apiUrl}/friends/requests/incoming`);
+  }
+
+  sendFriendRequest(toUsername: string) {
+    return this.http.post(`${this.apiUrl}/friends/request`, toUsername);
+  }
+
+  respondToRequest(requestId: number, accept: boolean) {
+    return this.http.post(`${this.apiUrl}/friends/request/respond`, { request_id: requestId, accept });
+  }
+
   isLoggedIn() {
     return !!localStorage.getItem('token');
   }
