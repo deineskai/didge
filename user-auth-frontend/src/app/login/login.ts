@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Auth } from '../auth';
 import { Router, RouterModule } from '@angular/router';
@@ -12,8 +12,9 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class Login {
   loginForm: any;
+  loginError = '';
 
-  constructor(private fb: FormBuilder, private auth: Auth, private router: Router) {
+  constructor(private fb: FormBuilder, private auth: Auth, private router: Router, private cdr: ChangeDetectorRef) {
     this.loginForm = this.fb.group({
       username: [''],
       password: ['']
@@ -21,9 +22,10 @@ export class Login {
   }
 
   onLogin() {
+    this.loginError = '';
     this.auth.login(this.loginForm.value).subscribe({
-      next: () => this.router.navigate(['/app/profile']),
-      error: () => alert('Invalid credentials')
+      next: () => this.router.navigate(['/app/settings']),
+      error: () => { this.loginError = 'Invalid username or password'; this.cdr.detectChanges(); }
     });
   }
 }

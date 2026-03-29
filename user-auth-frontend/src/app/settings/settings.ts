@@ -1,15 +1,15 @@
 import { Component, OnInit, inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
-import { isPlatformBrowser, CommonModule } from '@angular/common'; // Import CommonModule
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Auth } from '../auth';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'app-settings',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './profile.html'
+  templateUrl: './settings.html'
 })
-export class Profile implements OnInit {
+export class Settings implements OnInit {
   private platformId = inject(PLATFORM_ID);
   private auth = inject(Auth);
   private router = inject(Router);
@@ -17,7 +17,6 @@ export class Profile implements OnInit {
 
   username: string | null = null;
   userId: number | null = null;
-  message: string | null = null;
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
@@ -25,8 +24,7 @@ export class Profile implements OnInit {
         next: (data: any) => {
           this.username = data.username;
           this.userId = data.id;
-          this.message = data.message;
-          this.cdr.detectChanges(); // Trigger change detection to update the view with user data
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error("Session expired or invalid. Please log in again.", err);
@@ -37,10 +35,4 @@ export class Profile implements OnInit {
     }
   }
 
-  logout() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.auth.logout();
-      this.router.navigate(['/login']);
-    }
-  }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,17 @@ export class Auth {
 
   getUserProfile() {
     return this.http.get(`${this.apiUrl}/users/me`);
+  }
+
+  getUsername(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded.sub ?? null;
+    } catch {
+      return null;
+    }
   }
 
   isLoggedIn() {
