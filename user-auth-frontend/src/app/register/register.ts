@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Auth } from '../auth';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule],
-  templateUrl: './register.html'
+  imports: [ReactiveFormsModule, RouterModule],
+  templateUrl: './register.html',
+  styleUrls: ['../../styles.css','./register.css']
 })
 export class Register {
   registerForm: any;
@@ -16,8 +17,21 @@ export class Register {
     // define the form structure
     this.registerForm = this.fb.group({
     username: ['', Validators.required],
-    password: ['', [Validators.required, Validators.minLength(4)]]
+    password: ['', [Validators.required, Validators.minLength(4)]],
+    confirmPassword: ['', Validators.required]
+   }, { validators: this.passwordMatchValidator
   });
+  }
+
+  passwordMatchValidator(form: any) {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+
+    if (password === confirmPassword) {
+      return null;
+    } else {
+      return { passwordMismatch: true };
+    }
   }
 
   onSubmit() {

@@ -1,13 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Auth } from '../auth';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
-  templateUrl: './login.html'
+  imports: [ReactiveFormsModule, RouterModule],
+  templateUrl: './login.html',
+  styleUrl: '../../styles.css'
 })
 export class Login {
   loginForm: any;
@@ -21,7 +22,7 @@ export class Login {
 
   onLogin() {
     this.auth.login(this.loginForm.value).subscribe({
-      next: () => this.router.navigate(['/profile']),
+      next: () => this.router.navigate(['/app/profile']),
       error: () => alert('Invalid credentials')
     });
   }

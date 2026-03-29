@@ -25,6 +25,10 @@ export class Auth {
     );
   }
 
+  getUserProfile() {
+    return this.http.get(`${this.apiUrl}/users/me`);
+  }
+
   isLoggedIn() {
     return !!localStorage.getItem('token');
   }

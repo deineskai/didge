@@ -1,20 +1,26 @@
 <div class="auth-container">
-  <h2>Login to Your Account</h2>
-  
-  <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-    <div>
-      <label>Username:</label><br>
-      <input type="text" formControlName="username">
-    </div>
+  <div class="auth-card">
+    <h2>Welcome Back 👋</h2>
+    <p class="subtitle">Login to your account</p>
 
-    <div>
-      <label>Password:</label><br>
-      <input type="password" formControlName="password">
-    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" formControlName="username" placeholder="Enter your username">
+      </div>
 
-    <br>
-    <button type="submit">Sign In</button>
-  </form>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" formControlName="password" placeholder="Enter your password">
+      </div>
 
-  <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+      <button type="submit" class="primary-btn">Sign In</button>
+    </form>
+
+    <p class="switch-link">
+      Don't have an account?
+      <a routerLink="/register">Register here</a>
+    </p>
+  </div>
 </div>

@@ -1,7 +1,42 @@
-<h2>Register</h2>
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <input formControlName="username" placeholder="Username" type="text"><br>
-  <input formControlName="password" placeholder="Password" type="password"><br>
-  <button type="submit" [disabled]="!registerForm.valid">Create Account</button>
-</form>
-<a href="/login">Already have an account? Login</a>
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Create Account ✨</h2>
+    <p class="subtitle">Sign up to get started</p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label>Username</label>
+        <input formControlName="username" placeholder="Enter username" type="text">
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input formControlName="password" placeholder="Enter password" type="password">
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input formControlName="confirmPassword" placeholder="Repeat password" type="password">
+      </div>
+
+      <!-- Error message -->
+      @if(registerForm.errors?.['passwordMismatch'] && registerForm.touched) {
+        <p class="error">Passwords do not match</p>
+      }
+
+      <button 
+        type="submit" 
+        class="primary-btn"
+        [disabled]="registerForm.invalid">
+        Create Account
+      </button>
+
+    </form>
+
+    <p class="switch-link">
+      Already have an account?
+      <a routerLink="/login">Login</a>
+    </p>
+  </div>
+</div>
