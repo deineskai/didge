@@ -2,10 +2,11 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Auth } from '../auth';
+import { Icon } from '../icon/icon';
 
 @Component({
   selector: 'app-friends',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Icon],
   templateUrl: './friends.html',
   styleUrl: './friends.css',
 })
