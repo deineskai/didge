@@ -13,7 +13,6 @@ import { MealPlan } from './meal-plan/meal-plan';
 import { ShoppingList } from './shopping-list/shopping-list';
 import { Friends } from './friends/friends';
 import { Households } from './households/households';
-import { TestLayout } from './layouts/test-layout/test-layout';
 
 export const routes: Routes = [
   {
@@ -26,25 +25,18 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'app', // 👈 add prefix
+    path: 'app',
     component: MainLayout,
     children: [
       { path: '', redirectTo: '/app/discover', pathMatch: 'full' },
       { path: 'settings', component: Settings, canActivate: [authGuard] },
-      //{ path: 'recipes/discover', component: DiscoverRecipes, canActivate: [authGuard] },
+      { path: 'recipes/discover', component: DiscoverRecipes, canActivate: [authGuard] },
       { path: 'recipes/saved', component: SavedRecipes, canActivate: [authGuard] },
       { path: 'household/inventory', component: Inventory, canActivate: [authGuard] },
       { path: 'household/meal-plan', component: MealPlan, canActivate: [authGuard] },
       { path: 'household/shopping-list', component: ShoppingList, canActivate: [authGuard] },
       { path: 'friends', component: Friends, canActivate: [authGuard] },
       { path: 'households', component: Households, canActivate: [authGuard] }
-    ]
-  },
-  {
-    path: 'app',
-    component: TestLayout,
-    children: [
-      { path: 'recipes/discover', component: DiscoverRecipes, canActivate: [authGuard] },
     ]
   }
 ];
