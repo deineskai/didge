@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { ContentPageLayout } from '../layouts/content-page-layout/content-page-layout';
 
 @Component({
   selector: 'app-inventory',
-  imports: [],
+  imports: [ContentPageLayout],
   templateUrl: './inventory.html',
   styleUrl: './inventory.css',
 })

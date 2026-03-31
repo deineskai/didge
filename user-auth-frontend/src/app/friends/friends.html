@@ -1,8 +1,9 @@
-<div class="p-8 max-w-auto">
+<app-content-page-layout title="Friends">
+  
+
 
 
   <div class="flex items-center justify-between mb-6">
-    <h1 class="text-2xl font-bold">Friends</h1>
     <button (click)="openModal()"
       class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition">
       <app-icon name="plus" size="sm" [strokeWidth]="2"/>
@@ -61,7 +62,7 @@
       <p class="text-gray-400 text-sm">No friends yet. Send a request to get started!</p>
     }
   </div>
-</div>
+</app-content-page-layout>
 
 <!-- Add friend modal -->
 @if(modalOpen) {

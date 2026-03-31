@@ -1,6 +1,4 @@
-<div class="p-8 max-w-auto">
-  <h1 class="text-2xl font-bold">Settings</h1>
-
+<app-content-page-layout title="Settings">
   @if(username) {
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
       <h2 class="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-4">Account</h2>
@@ -18,4 +16,4 @@
   } @else {
     <p class="text-gray-400 text-sm">Loading account information...</p>
   }
-</div>
+</app-content-page-layout>

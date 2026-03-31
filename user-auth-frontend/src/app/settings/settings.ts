@@ -2,11 +2,12 @@ import { Component, OnInit, inject, PLATFORM_ID, ChangeDetectorRef } from '@angu
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Auth } from '../auth';
+import { ContentPageLayout } from '../layouts/content-page-layout/content-page-layout';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ContentPageLayout],
   templateUrl: './settings.html'
 })
 export class Settings implements OnInit {
