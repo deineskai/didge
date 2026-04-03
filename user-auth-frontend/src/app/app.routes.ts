@@ -13,6 +13,7 @@ import { MealPlan } from './meal-plan/meal-plan';
 import { ShoppingList } from './shopping-list/shopping-list';
 import { Friends } from './friends/friends';
 import { Households } from './households/households';
+import { Recipe } from './recipe/recipe';
 
 export const routes: Routes = [
   {
@@ -36,7 +37,8 @@ export const routes: Routes = [
       { path: 'household/meal-plan', component: MealPlan, canActivate: [authGuard] },
       { path: 'household/shopping-list', component: ShoppingList, canActivate: [authGuard] },
       { path: 'friends', component: Friends, canActivate: [authGuard] },
-      { path: 'households', component: Households, canActivate: [authGuard] }
+      { path: 'households', component: Households, canActivate: [authGuard] },
+      { path: 'recipe', component: Recipe, canActivate: [authGuard] }
     ]
   }
 ];
