@@ -5,3 +5,15 @@ app-login,
 app-register {
   display: contents;
 }
+
+html, body {
+  @apply bg-gray-50 dark:bg-gray-900;
+}
+
+@media screen and (max-width: 768px) {
+  input, 
+  select, 
+  textarea {
+    font-size: 16px !important;
+  }
+}
