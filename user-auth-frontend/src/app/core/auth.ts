@@ -5,7 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class Auth {
   private apiUrl = environment.apiUrl;
@@ -19,11 +19,11 @@ export class Auth {
 
   login(userData: any) {
     return this.http.post<any>(`${this.apiUrl}/login`, userData).pipe(
-      tap(res => {
+      tap((res) => {
         if (res.access_token) {
           localStorage.setItem('token', res.access_token);
         }
-      })
+      }),
     );
   }
 
@@ -50,12 +50,29 @@ export class Auth {
     return this.http.get<any[]>(`${this.apiUrl}/friends/requests/incoming`);
   }
 
+  getOutgoingRequests() {
+    return this.http.get<any[]>(`${this.apiUrl}/friends/requests/outgoing`);
+  }
+
   sendFriendRequest(toUsername: string) {
     return this.http.post(`${this.apiUrl}/friends/request`, toUsername);
   }
 
-  respondToRequest(requestId: number, accept: boolean) {
-    return this.http.post(`${this.apiUrl}/friends/request/respond`, { request_id: requestId, accept });
+  respondToFriendRequest(requestId: number, accept: boolean) {
+    return this.http.post(`${this.apiUrl}/friends/request/respond`, {
+      request_id: requestId,
+      accept,
+    });
+  }
+
+  revokeFriendRequest(requestId: number) {
+    return this.http.post(`${this.apiUrl}/friends/request/revoke`, {
+      request_id: requestId,
+    });
+  }
+
+  removeFriend(friend_user_id: number) {
+    return this.http.post(`${this.apiUrl}/friends/remove`, { friend_user_id: friend_user_id });
   }
 
   isLoggedIn() {
