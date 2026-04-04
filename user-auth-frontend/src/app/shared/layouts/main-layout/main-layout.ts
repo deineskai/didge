@@ -1,14 +1,13 @@
 import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { Auth } from '../../auth';
-import { Icon } from '../../icon/icon';
-import { NavIcon } from '../../nav-icon/nav-icon';
-import { NavItem } from '../../nav-item/nav-item';
+import { Auth } from '../../../core/auth';
+import { NavIcon } from '../../components/nav-icon/nav-icon';
+import { NavItem } from '../../components/nav-item/nav-item';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Icon, NavIcon, NavItem],
+  imports: [RouterOutlet, RouterLink, NavIcon],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',
 })

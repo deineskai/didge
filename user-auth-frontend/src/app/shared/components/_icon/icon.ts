@@ -1,3 +1,4 @@
+// This component is no longer used, but may be used as a starting point for a future icon component.
 import { Component, Input, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 

@@ -1,8 +1,8 @@
 import { Component, OnInit, inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Auth } from '../auth';
-import { ContentPageLayout } from '../layouts/content-page-layout/content-page-layout';
+import { Auth } from '../../core/auth';
+import { ContentPageLayout } from '../../shared/layouts/content-page-layout/content-page-layout';
 
 @Component({
   selector: 'app-settings',

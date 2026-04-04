@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Auth } from '../auth';
+import { Auth } from '../../core/auth';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -8,7 +8,7 @@ import { Router, RouterModule } from '@angular/router';
   standalone: true,
   imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './register.html',
-  styleUrls: ['../../styles.css','./register.css']
+  styleUrls: ['../../../styles.css','./register.css']
 })
 export class Register {
   registerForm: any;

@@ -1,19 +1,19 @@
 import { Routes } from '@angular/router';
-import { Login } from './login/login';
-import { Register } from './register/register';
-import { Settings } from './settings/settings';
-import { authGuard } from './auth-guard';
-import { guestGuard } from './guest-guard';
-import { MainLayout } from './layouts/main-layout/main-layout';
-import { AuthLayout } from './layouts/auth-layout/auth-layout';
-import { DiscoverRecipes } from './discover-recipes/discover-recipes';
-import { SavedRecipes } from './saved-recipes/saved-recipes';
-import { Inventory } from './inventory/inventory';
-import { MealPlan } from './meal-plan/meal-plan';
-import { ShoppingList } from './shopping-list/shopping-list';
-import { Friends } from './friends/friends';
-import { Households } from './households/households';
-import { Recipe } from './recipe/recipe';
+import { Login } from './auth/login/login';
+import { Register } from './auth/register/register';
+import { Settings } from './features/settings/settings';
+import { authGuard } from './core/auth-guard';
+import { guestGuard } from './core/guest-guard';
+import { MainLayout } from './shared/layouts/main-layout/main-layout';
+import { AuthLayout } from './shared/layouts/auth-layout/auth-layout';
+import { DiscoverRecipes } from './features/discover-recipes/discover-recipes';
+import { SavedRecipes } from './features/saved-recipes/saved-recipes';
+import { Inventory } from './features/inventory/inventory';
+import { MealPlan } from './features/meal-plan/meal-plan';
+import { ShoppingList } from './features/shopping-list/shopping-list';
+import { Friends } from './features/friends/friends';
+import { Households } from './features/households/households';
+import { Recipe } from './features/recipe/recipe';
 
 export const routes: Routes = [
   {

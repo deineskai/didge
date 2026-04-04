@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { Auth } from '../auth';
+import { Auth } from '../../core/auth';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -8,7 +8,7 @@ import { Router, RouterModule } from '@angular/router';
   standalone: true,
   imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './login.html',
-  styleUrl: '../../styles.css'
+  styleUrl: '../../../styles.css'
 })
 export class Login {
   loginForm: any;
