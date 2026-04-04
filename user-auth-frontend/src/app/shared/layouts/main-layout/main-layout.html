@@ -1,7 +1,5 @@
 <!-- Main Layout -->
 <div class="text-gray-800 dark:text-white">
-    <!-- Gradient Hintergrund -->
-    <div class="fixed top-0 left-0 w-full h-20 bg-gradient-to-b from-white dark:from-gray-900 to-transparent z-20 sm:hidden" [class.hidden]="isSidebarOpen"></div>
 
     <!-- Sidebar Toggle (for Mobile) -->
     <button (click)="toggleSidebar()" aria-controls="separator-sidebar" type="button" class="z-30 fixed inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
@@ -130,16 +128,17 @@
         </ul>
     </div>
     </aside>
-
-    <main class="flex-1 overflow-y-auto md:pt-0 pt-12 pb-16 md:pb-0 sm:ml-64">
-        <router-outlet class="bg-gray-100 dark:bg-gray-800"></router-outlet>
-    </main>
-
+    
     <!-- Sidebar Backdrop -->
     @if (isSidebarOpen) {
     <div
-        class="absolute inset-0  bg-black/40 md:hidden"
+        class="absolute inset-0 bg-black/40 block sm:hidden z-30"
         (click)="toggleSidebar()"
     ></div>
     }
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto md:pt-0 pt-6 md:pb-0 sm:ml-64">
+        <router-outlet class="bg-gray-100 dark:bg-gray-800"></router-outlet>
+    </main>    
 </div>

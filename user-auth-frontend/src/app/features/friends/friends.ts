@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Auth } from '../../core/auth';
 import { ContentPageLayout } from '../../shared/layouts/content-page-layout/content-page-layout';
+import { Avatar } from "../../shared/components/avatar/avatar";
 
 @Component({
   selector: 'app-friends',
-  imports: [CommonModule, FormsModule, ContentPageLayout],
+  imports: [CommonModule, FormsModule, ContentPageLayout, Avatar],
   templateUrl: './friends.html',
   styleUrl: './friends.css',
 })

@@ -1,11 +1,13 @@
-<!-- Main Content -->
-<div class="p-8 max-w-auto">
-  <!-- Page Title -->
-  <div class="fixed bg-gray-50 dark:bg-gray-900 w-full top-0 pt-14 md:pt-8 pb-6 flex items-center justify-between">
+<div class="p-8">
+  <div class="sticky top-0 bg-gray-50 dark:bg-gray-900 pb-6 flex items-center justify-between">
     <h1 class="text-2xl font-bold">{{ title }}</h1>
+    
+    <div class="flex items-center gap-2">
+      <ng-content select="[pageActions]"></ng-content>
+    </div>
   </div>
-  <!-- Page Content -->
-  <div class="pt-8 md:pt-14 overflow-hidden">
-    <ng-content ></ng-content>
+
+  <div class="overflow-hidden">
+    <ng-content></ng-content>
   </div>
 </div>
