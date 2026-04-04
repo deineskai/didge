@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:user-auth-frontend": "node dist/user-auth-frontend/server/server.mjs"
+    "test": "ng test"
   },
   "private": true,
   "packageManager": "npm@10.9.4",
@@ -17,10 +16,7 @@
     "@angular/core": "^21.2.0",
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
-    "@angular/platform-server": "^21.2.0",
     "@angular/router": "^21.2.0",
-    "@angular/ssr": "^21.2.5",
-    "express": "^5.1.0",
     "flowbite": "^4.0.1",
     "jwt-decode": "^4.0.0",
     "rxjs": "~7.8.0",
@@ -31,7 +27,6 @@
     "@angular/cli": "^21.2.5",
     "@angular/compiler-cli": "^21.2.0",
     "@tailwindcss/postcss": "^4.2.2",
-    "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
     "jsdom": "^28.0.0",
     "postcss": "^8.5.8",
