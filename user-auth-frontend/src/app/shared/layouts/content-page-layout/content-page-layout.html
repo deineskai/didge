@@ -9,75 +9,29 @@
     <!-- Left -->
     <div class="flex items-center">
       <!-- Sidebar Toggle -->
-      <div class="ml-6 my-3 w-8 h-8 md:w-0" (click)="layoutService.toggleSidebar()">
-        <app-nav-icon class="sm:visible md:hidden" [class.hidden]="layoutService.isSidebarOpen()">
-          <svg
-            class="w-8 h-8 text-gray-800 dark:text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1"
-              d="m14 8-4 4 4 4"
-            />
-          </svg>
-        </app-nav-icon>
-      </div>
+      <app-round-button [transparent]="true" class="ml-6 my-3 md:hidden">
+        <app-icon
+          (click)="layoutService.toggleSidebar()"
+          name="chevron-left"
+          [strokeWidth]="1"
+          class=" "
+          [class.hidden]="layoutService.isSidebarOpen()"
+        />
+      </app-round-button>
       <!-- Page Title -->
-      <h1 class="ml-2 my-3 text-md font-regular">{{ title }}</h1>
+      <h1 class="ml-2 md:ml-8 my-3 text-md font-regular">{{ title }}</h1>
     </div>
-
     <!-- Right -->
     <div class="flex items-center gap-4 mx-6 my-3 inset-x-0">
       <!-- Share Button -->
       <app-round-button [transparent]="true">
-        <app-nav-icon>
-          <svg
-            class="ml-0.5 pt-1 w-7 h-7 dark:text-white text-gray-950"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1"
-              d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"
-            />
-          </svg>
-        </app-nav-icon>
+        <div class="w-6 h-6 ml-1 mt-2">
+          <app-icon name="share" [strokeWidth]="1" />
+        </div>
       </app-round-button>
       <!-- More Button -->
       <app-round-button [transparent]="true">
-        <app-nav-icon>
-          <svg
-            class="w-8 h-8 dark:text-white text-gray-950"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-width="2"
-              d="M6 12h.01m6 0h.01m5.99 0h.01"
-            />
-          </svg>
-        </app-nav-icon>
+        <app-icon name="more" [strokeWidth]="2" />
       </app-round-button>
     </div>
   </div>
@@ -165,77 +119,28 @@
     <div class="absolute top-0 left-0 flex justify-between w-full">
       <!-- Left -->
       <div class="flex gap-4 mx-6 my-3">
-        <!-- Sidebar Button -->
-        <app-round-button
-          [transparent]="true"
-          (click)="layoutService.toggleSidebar()"
-          class="md:hidden"
-        >
-          <app-nav-icon>
-            <svg
-              class="w-8 h-8 dark:text-white text-gray-950"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1"
-                d="m14 8-4 4 4 4"
-              />
-            </svg>
-          </app-nav-icon>
+        <!-- Sidebar Toggle -->
+        <app-round-button [transparent]="true" class="sm:visible md:hidden">
+          <app-icon
+            (click)="layoutService.toggleSidebar()"
+            name="chevron-left"
+            [strokeWidth]="1"
+            class=" "
+            [class.hidden]="layoutService.isSidebarOpen()"
+          />
         </app-round-button>
       </div>
       <!-- Right -->
       <div class="flex gap-4 mx-6 my-3">
         <!-- Share Button -->
         <app-round-button [transparent]="true">
-          <app-nav-icon>
-            <svg
-              class="ml-0.5 pt-1 w-7 h-7 dark:text-white text-gray-950"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1"
-                d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"
-              />
-            </svg>
-          </app-nav-icon>
+          <div class="w-6 h-6 ml-1 mt-1">
+            <app-icon name="share" [strokeWidth]="1" />
+          </div>
         </app-round-button>
         <!-- More Button -->
         <app-round-button [transparent]="true">
-          <app-nav-icon>
-            <svg
-              class="w-8 h-8 dark:text-white text-gray-950"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="2"
-                d="M6 12h.01m6 0h.01m5.99 0h.01"
-              />
-            </svg>
-          </app-nav-icon>
+          <app-icon name="more" [strokeWidth]="2" />
         </app-round-button>
       </div>
     </div>
