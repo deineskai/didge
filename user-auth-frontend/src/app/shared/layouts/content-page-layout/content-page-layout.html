@@ -1,7 +1,252 @@
+<!-- Header Bar (visible when scrolled)-->
+<div
+  class="fixed top-0 left-0 md:left-64 right-0 h-14 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-250 ease-in-out transform flex z-20 scroll-appearance"
+  [class.opacity-100]="isScrolled"
+  [class.opacity-0]="!isScrolled"
+  [class.no-transition]="!isScrolled"
+>
+  <div class="flex justify-between items-center w-full">
+    <!-- Left -->
+    <div class="flex items-center">
+      <!-- Sidebar Toggle -->
+      <div class="ml-6 my-3 w-8 h-8 md:w-0" (click)="layoutService.toggleSidebar()">
+        <app-nav-icon class="sm:visible md:hidden" [class.hidden]="layoutService.isSidebarOpen()">
+          <svg
+            class="w-8 h-8 text-gray-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1"
+              d="m14 8-4 4 4 4"
+            />
+          </svg>
+        </app-nav-icon>
+      </div>
+      <!-- Page Title -->
+      <h1 class="ml-2 my-3 text-md font-regular">{{ title }}</h1>
+    </div>
+
+    <!-- Right -->
+    <div class="flex items-center gap-4 mx-6 my-3 inset-x-0">
+      <!-- Share Button -->
+      <app-round-button [transparent]="true">
+        <app-nav-icon>
+          <svg
+            class="ml-0.5 pt-1 w-7 h-7 dark:text-white text-gray-950"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1"
+              d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"
+            />
+          </svg>
+        </app-nav-icon>
+      </app-round-button>
+      <!-- More Button -->
+      <app-round-button [transparent]="true">
+        <app-nav-icon>
+          <svg
+            class="w-8 h-8 dark:text-white text-gray-950"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="2"
+              d="M6 12h.01m6 0h.01m5.99 0h.01"
+            />
+          </svg>
+        </app-nav-icon>
+      </app-round-button>
+    </div>
+  </div>
+</div>
+
+@if (coverImageSource != null) {
+  <div class="relative inline-block max-h-80 w-full overflow-hidden">
+    <!-- Cover Image -->
+    <img src="{{ coverImageSource }}" class="w-full h-[25vh] object-cover" alt="Cover Image" />
+    <!-- Control Elements -->
+    <div class="absolute top-0 left-0 flex justify-between w-full">
+      <!-- Left -->
+      <div class="flex gap-4 mx-6 my-3">
+        <app-round-button (click)="layoutService.toggleSidebar()" class="md:hidden">
+          <app-nav-icon>
+            <svg
+              class="w-8 h-8 text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1"
+                d="m14 8-4 4 4 4"
+              />
+            </svg>
+          </app-nav-icon>
+        </app-round-button>
+      </div>
+      <!-- Right -->
+      <div class="flex gap-4 mx-6 my-3">
+        <app-round-button>
+          <app-nav-icon>
+            <svg
+              class="ml-0.5 pt-1 w-7 h-7 text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1"
+                d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"
+              />
+            </svg>
+          </app-nav-icon>
+        </app-round-button>
+        <app-round-button>
+          <app-nav-icon>
+            <svg
+              class="w-8 h-8 text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="2"
+                d="M6 12h.01m6 0h.01m5.99 0h.01"
+              />
+            </svg>
+          </app-nav-icon>
+        </app-round-button>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="relative inline-block h-14 max-h-80 w-full overflow-hidden">
+    <!-- Control Elements -->
+    <div class="absolute top-0 left-0 flex justify-between w-full">
+      <!-- Left -->
+      <div class="flex gap-4 mx-6 my-3">
+        <!-- Sidebar Button -->
+        <app-round-button
+          [transparent]="true"
+          (click)="layoutService.toggleSidebar()"
+          class="md:hidden"
+        >
+          <app-nav-icon>
+            <svg
+              class="w-8 h-8 dark:text-white text-gray-950"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1"
+                d="m14 8-4 4 4 4"
+              />
+            </svg>
+          </app-nav-icon>
+        </app-round-button>
+      </div>
+      <!-- Right -->
+      <div class="flex gap-4 mx-6 my-3">
+        <!-- Share Button -->
+        <app-round-button [transparent]="true">
+          <app-nav-icon>
+            <svg
+              class="ml-0.5 pt-1 w-7 h-7 dark:text-white text-gray-950"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1"
+                d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"
+              />
+            </svg>
+          </app-nav-icon>
+        </app-round-button>
+        <!-- More Button -->
+        <app-round-button [transparent]="true">
+          <app-nav-icon>
+            <svg
+              class="w-8 h-8 dark:text-white text-gray-950"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="2"
+                d="M6 12h.01m6 0h.01m5.99 0h.01"
+              />
+            </svg>
+          </app-nav-icon>
+        </app-round-button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Main Content -->
 <div class="p-8">
   <div class="sticky top-0 bg-gray-50 dark:bg-gray-900 pb-6 flex items-center justify-between">
     <h1 class="text-2xl font-bold">{{ title }}</h1>
-    
+
     <div class="flex items-center gap-2">
       <ng-content select="[pageActions]"></ng-content>
     </div>
