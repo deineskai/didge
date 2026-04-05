@@ -1,6 +1,6 @@
 <!-- Header Bar (visible when scrolled)-->
 <div
-  class="fixed top-0 left-0 md:left-64 right-0 h-14 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-250 ease-in-out transform flex z-20 scroll-appearance"
+  class="fixed top-0 left-0 sm:left-64 right-0 h-14 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-250 ease-in-out transform flex z-20 scroll-appearance"
   [class.opacity-100]="isScrolled"
   [class.opacity-0]="!isScrolled"
   [class.no-transition]="!isScrolled"
@@ -9,7 +9,7 @@
     <!-- Left -->
     <div class="flex items-center">
       <!-- Sidebar Toggle -->
-      <app-round-button [transparent]="true" class="ml-6 my-3 md:hidden">
+      <app-round-button [transparent]="true" class="ml-6 my-3 sm:hidden">
         <app-icon
           (click)="layoutService.toggleSidebar()"
           name="chevron-left"
@@ -19,7 +19,11 @@
         />
       </app-round-button>
       <!-- Page Title -->
-      <h1 class="ml-2 md:ml-8 my-3 text-md font-regular">{{ title }}</h1>
+      <div class="ml-2 sm:ml-8">
+        <h1 class="text-md font-regular">
+          {{ title }}
+        </h1>
+      </div>
     </div>
     <!-- Right -->
     <div class="flex items-center gap-4 mx-6 my-3 inset-x-0">
@@ -45,7 +49,7 @@
     <div class="absolute top-0 left-0 flex justify-between w-full">
       <!-- Left -->
       <div class="flex gap-4 mx-6 my-3">
-        <app-round-button (click)="layoutService.toggleSidebar()" class="md:hidden">
+        <app-round-button (click)="layoutService.toggleSidebar()" class="sm:hidden">
           <app-nav-icon>
             <svg
               class="w-8 h-8 text-white"
@@ -120,7 +124,7 @@
       <!-- Left -->
       <div class="flex gap-4 mx-6 my-3">
         <!-- Sidebar Toggle -->
-        <app-round-button [transparent]="true" class="sm:visible md:hidden">
+        <app-round-button [transparent]="true" class="sm:visible sm:hidden">
           <app-icon
             (click)="layoutService.toggleSidebar()"
             name="chevron-left"
