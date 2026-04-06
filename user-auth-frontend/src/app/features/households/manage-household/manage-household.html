@@ -1,0 +1,123 @@
+<app-content-page-layout [title]="household.name">
+  <!-- Invite Button -->
+  <div pageActions class="">
+    @if (household.admin) {
+      <button
+        (click)="openInviteToHouseholdModal()"
+        class="flex gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold rounded-lg transition"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Invite
+      </button>
+    }
+  </div>
+  <!-- Members -->
+  <div>
+    @if (household.id) {
+      <ul>
+        @for (member of household.members; track member.id) {
+          <div class="flex items-center justify-between rounded-2xl">
+            <!-- Avatar -->
+            <app-avatar
+              [imageSrc]="'https://picsum.photos/200/300'"
+              [username]="member.user_id"
+              [subtitle]="member.is_admin ? 'Admin' : ''"
+            ></app-avatar>
+            <!-- Button Elements -->
+            <div class="flex gap-2">
+              <button
+                [routerLink]="['/app/households/manage']"
+                [queryParams]="{ id: household.id }"
+                class="px-3 py-1 text-sm font-semibold bg-blue-700 hover:bg-blue-800 text-white rounded-lg transition"
+              >
+                Manage
+              </button>
+            </div>
+          </div>
+        }
+      </ul>
+      <!-- Leave Button -->
+      <div class="flex flex-col items-center py-16">
+        @if (household.admin) {
+          <button
+            (click)="deleteHousehold(household.id)"
+            class="flex gap-2 px-4 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-semibold rounded-lg transition"
+          >
+            Delete Household
+          </button>
+        } @else {
+          <button
+            (click)="leaveHousehold(household.id)"
+            class="flex gap-2 px-4 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-semibold rounded-lg transition"
+          >
+            Leave Household
+          </button>
+        }
+      </div>
+    } @else {
+      <div class="flex items-center justify-center h-48">
+        <h1 class="text-gray-400 text-2xl font-bold text-center">Household not found</h1>
+      </div>
+    }
+  </div>
+</app-content-page-layout>
+
+<!-- Invite to household modal -->
+@if (inviteToHouseholdModalOpen) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/40" (click)="inviteToHouseholdModalOpen = false"></div>
+    <!-- Dialog -->
+    <div
+      class="relative w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700"
+    >
+      <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
+        Invite to {{ household.name }}
+      </h2>
+
+      <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+        >Select friend to invite</label
+      >
+      <select
+        (change)="onFriendSelectChange($event)"
+        [value]="inviteToHouseholdModalUserId"
+        (keydown.enter)="sendInvitation()"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 mb-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+      >
+        @for (friend of friends | async; track friend.id) {
+          <option value="{{ friend.id }}">{{ friend.username }}</option>
+        }
+      </select>
+
+      @if (inviteToHouseholdModalError) {
+        <p class="text-red-600 text-xs mb-3">{{ inviteToHouseholdModalError }}</p>
+      }
+
+      <div class="flex gap-2 justify-end">
+        <button
+          (click)="inviteToHouseholdModalOpen = false"
+          class="px-4 py-2 text-sm font-semibold text-gray-600 bg-gray-100 dark:bg-gray-600 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-500 transition"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="sendInvitation()"
+          [disabled]="inviteToHouseholdModalLoading || !inviteToHouseholdModalUserId"
+          class="px-4 py-2 text-sm font-semibold bg-blue-700 hover:bg-blue-800 text-white rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {{ inviteToHouseholdModalLoading ? 'Sending...' : 'Send Invitation' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

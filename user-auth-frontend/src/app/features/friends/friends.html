@@ -2,7 +2,7 @@
   <!-- Add friend button -->
   <div pageActions class="">
     <button
-      (click)="openModal()"
+      (click)="openAddFriendModal()"
       class="flex gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold rounded-lg transition"
     >
       <svg
@@ -92,6 +92,7 @@
               <!-- Button Elements -->
               <div class="flex gap-2">
                 <button
+                  (click)="openInviteToHouseholdModal(friend)"
                   class="px-3 py-1 text-sm font-semibold bg-blue-700 hover:bg-blue-800 text-white rounded-lg transition"
                 >
                   Invite
@@ -188,10 +189,10 @@
 </app-content-page-layout>
 
 <!-- Add friend modal -->
-@if (modalOpen) {
+@if (addFriendModalOpen) {
   <div class="fixed inset-0 z-50 flex items-center justify-center">
     <!-- Backdrop -->
-    <div class="absolute inset-0 bg-black/40" (click)="modalOpen = false"></div>
+    <div class="absolute inset-0 bg-black/40" (click)="addFriendModalOpen = false"></div>
     <!-- Dialog -->
     <div
       class="relative w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700"
@@ -203,30 +204,80 @@
       >
       <input
         type="text"
-        [(ngModel)]="modalUsername"
+        [(ngModel)]="addFriendModalUsername"
         placeholder="Enter username"
         autocomplete="off"
         (keydown.enter)="sendRequest()"
         class="w-full px-3 py-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white mb-3"
       />
 
-      @if (modalError) {
-        <p class="text-red-600 text-xs mb-3">{{ modalError }}</p>
+      @if (addFriendModalError) {
+        <p class="text-red-600 text-xs mb-3">{{ addFriendModalError }}</p>
       }
 
       <div class="flex gap-2 justify-end">
         <button
-          (click)="modalOpen = false"
+          (click)="addFriendModalOpen = false"
           class="px-4 py-2 text-sm font-semibold text-gray-600 bg-gray-100 dark:bg-gray-600 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-500 transition"
         >
           Cancel
         </button>
         <button
           (click)="sendRequest()"
-          [disabled]="modalLoading || !modalUsername.trim()"
+          [disabled]="addFriendModalLoading || !addFriendModalUsername.trim()"
           class="px-4 py-2 text-sm font-semibold bg-blue-700 hover:bg-blue-800 text-white rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {{ modalLoading ? 'Sending...' : 'Send Request' }}
+          {{ addFriendModalLoading ? 'Sending...' : 'Send Request' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Invite to household modal -->
+@if (inviteToHouseholdModalOpen) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/40" (click)="inviteToHouseholdModalOpen = false"></div>
+    <!-- Dialog -->
+    <div
+      class="relative w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700"
+    >
+      <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4">
+        Invite {{ inviteToHouseholdModalUser.username }} to a Household
+      </h2>
+
+      <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
+        >Household</label
+      >
+      <select
+        (change)="onHouseholdSelectChange($event)"
+        [value]="inviteToHouseholdModalHouseholdId"
+        (keydown.enter)="sendInvitation()"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 mb-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+      >
+        @for (hh of households | async; track hh.id) {
+          <option value="{{ hh.id }}">{{ hh.name }}</option>
+        }
+      </select>
+
+      @if (inviteToHouseholdModalError) {
+        <p class="text-red-600 text-xs mb-3">{{ inviteToHouseholdModalError }}</p>
+      }
+
+      <div class="flex gap-2 justify-end">
+        <button
+          (click)="inviteToHouseholdModalOpen = false"
+          class="px-4 py-2 text-sm font-semibold text-gray-600 bg-gray-100 dark:bg-gray-600 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-500 transition"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="sendInvitation()"
+          [disabled]="inviteToHouseholdModalLoading || !inviteToHouseholdModalHouseholdId"
+          class="px-4 py-2 text-sm font-semibold bg-blue-700 hover:bg-blue-800 text-white rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {{ inviteToHouseholdModalLoading ? 'Sending...' : 'Send Invitation' }}
         </button>
       </div>
     </div>

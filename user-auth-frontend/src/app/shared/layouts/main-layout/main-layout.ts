@@ -16,9 +16,6 @@ export class MainLayout {
   platformId = inject(PLATFORM_ID);
   private auth = inject(Auth);
 
-  username = isPlatformBrowser(this.platformId) ? this.auth.getUsername() : null;
-  menuOpen = false;
-
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       this.auth.logout();

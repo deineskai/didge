@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Auth } from '../../core/auth';
 import { ContentPageLayout } from '../../shared/layouts/content-page-layout/content-page-layout';
 import { Avatar } from '../../shared/components/avatar/avatar';
+import { HouseholdService } from '../../core/household-service';
 
 @Component({
   selector: 'app-friends',
@@ -14,15 +15,19 @@ import { Avatar } from '../../shared/components/avatar/avatar';
 export class Friends implements OnInit {
   private auth = inject(Auth);
   private cdr = inject(ChangeDetectorRef);
+  householdService = inject(HouseholdService);
+  firstHousehold: any;
+
   activeTab = signal<'friends' | 'incoming' | 'outgoing'>('friends');
 
   friends: any[] = [];
   incomingRequests: any[] = [];
   outgoingRequests: any[] = [];
-  modalOpen = false;
-  modalUsername = '';
-  modalError = '';
-  modalLoading = false;
+
+  addFriendModalOpen = false;
+  addFriendModalUsername = '';
+  addFriendModalError = '';
+  addFriendModalLoading = false;
 
   onSelectChange(event: Event) {
     const value = (event.target as HTMLInputElement).value;
@@ -34,6 +39,13 @@ export class Friends implements OnInit {
   }
 
   ngOnInit() {
+    this.householdService.getHouseholds().subscribe({
+      next: (households) => {
+        if (households && households.length > 0) {
+          this.firstHousehold = households[0];
+        }
+      },
+    });
     this.load();
   }
 
@@ -58,25 +70,25 @@ export class Friends implements OnInit {
     });
   }
 
-  openModal() {
-    this.modalUsername = '';
-    this.modalError = '';
-    this.modalOpen = true;
+  openAddFriendModal() {
+    this.addFriendModalUsername = '';
+    this.addFriendModalError = '';
+    this.addFriendModalOpen = true;
   }
 
   sendRequest() {
-    if (!this.modalUsername.trim()) return;
-    this.modalLoading = true;
-    this.modalError = '';
-    this.auth.sendFriendRequest(this.modalUsername.trim()).subscribe({
+    if (!this.addFriendModalUsername.trim()) return;
+    this.addFriendModalLoading = true;
+    this.addFriendModalError = '';
+    this.auth.sendFriendRequest(this.addFriendModalUsername.trim()).subscribe({
       next: () => {
-        this.modalOpen = false;
-        this.modalLoading = false;
+        this.addFriendModalOpen = false;
+        this.addFriendModalLoading = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
-        this.modalError = err.error?.detail ?? 'Something went wrong';
-        this.modalLoading = false;
+        this.addFriendModalError = err.error?.detail ?? 'Something went wrong';
+        this.addFriendModalLoading = false;
         this.cdr.detectChanges();
       },
     });
@@ -105,5 +117,37 @@ export class Friends implements OnInit {
         this.load();
       },
     });
+  }
+
+  inviteToHouseholdModalOpen = false;
+  inviteToHouseholdModalHouseholdId = 0;
+  inviteToHouseholdModalError = '';
+  inviteToHouseholdModalLoading = false;
+  inviteToHouseholdModalUser: any = {};
+
+  households = this.householdService.getHouseholds();
+
+  openInviteToHouseholdModal(user: any) {
+    this.inviteToHouseholdModalHouseholdId = this.firstHousehold.id;
+    this.inviteToHouseholdModalError = '';
+    this.inviteToHouseholdModalOpen = true;
+    this.inviteToHouseholdModalUser = user;
+  }
+
+  sendInvitation() {
+    this.householdService
+      .sendInvitation(this.inviteToHouseholdModalUser.id, this.inviteToHouseholdModalHouseholdId)
+      .subscribe({
+        next: (response) => {
+          this.load();
+          this.inviteToHouseholdModalOpen = false;
+        },
+        error: (err) => {},
+      });
+  }
+
+  onHouseholdSelectChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.inviteToHouseholdModalHouseholdId = Number(value);
   }
 }

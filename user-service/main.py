@@ -11,7 +11,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"], # Allow Angular dev server
+    allow_origins=["*"], # Allow Angular dev server
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -50,7 +50,7 @@ def login(user_data: UserSchema = Body(...), db: Session = Depends(get_db)):
     if not user or not auth.verify_password(user_data.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    token = auth.create_access_token(data={"sub": user.username})
+    token = auth.create_access_token(data={"sub": str(user.id)})
     return {"access_token": token, "token_type": "bearer"}
 
 @app.get("/users/me")
@@ -94,9 +94,37 @@ def respond_to_friend_request(request_id: int = Body(...), accept: bool = Body(.
     if not friend_request:
         raise HTTPException(status_code=404, detail="Friend request not found")
     
-    friend_request.status = "accepted" if accept else "rejected"
+    if accept:
+        friend_request.status = "accepted"
+    else:
+        db.delete(friend_request)
     db.commit()
     return {"message": f"Friend request {'accepted' if accept else 'rejected'} successfully"}
+
+@app.post("/friends/request/revoke")
+def revoke_friend_request(request_id: int = Body(..., embed=True), current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    friend_request = db.query(models.FriendRequest).filter(models.FriendRequest.id == request_id, models.FriendRequest.from_user_id == current_user.id).first()
+    
+    if not friend_request:
+        raise HTTPException(status_code=404, detail="Friend request not found")
+    
+    db.delete(friend_request)
+    db.commit()
+    return {"message": "Friend request revoked successfully"}
+
+@app.post("/friends/remove")
+def remove_friend(friend_user_id: int = Body(..., embed=True), current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
+    friend_request = db.query(models.FriendRequest).filter(
+        ((models.FriendRequest.from_user_id == current_user.id) & (models.FriendRequest.to_user_id == friend_user_id)) |
+        ((models.FriendRequest.from_user_id == friend_user_id) & (models.FriendRequest.to_user_id == current_user.id))
+    ).first()
+
+    if not friend_request:
+        raise HTTPException(status_code=404, detail="Friend request not found")
+
+    db.delete(friend_request)
+    db.commit()
+    return {"message": "Friend removed successfully"}
 
 @app.get("/friends/requests/incoming")
 def get_friend_requests(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
@@ -111,7 +139,11 @@ def get_friend_requests(current_user: models.User = Depends(auth.get_current_use
 @app.get("/friends/requests/outgoing")
 def get_outgoing_friend_requests(current_user: models.User = Depends(auth.get_current_user), db: Session = Depends(get_db)):
     requests = db.query(models.FriendRequest).filter(models.FriendRequest.from_user_id == current_user.id).filter(models.FriendRequest.status == "pending").all()
-    return [{"id": r.id, "to_user_id": r.to_user_id, "status": r.status} for r in requests]
+    result = []
+    for r in requests:
+        to_user = db.query(models.User).filter(models.User.id == r.to_user_id).first()
+        result.append({"id": r.id, "to_user_id": r.to_user_id, "to_username": to_user.username if to_user else None, "status": r.status})
+    return result
 
 
 @app.get("/friends")

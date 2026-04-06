@@ -31,7 +31,7 @@ export class Auth {
     return this.http.get(`${this.apiUrl}/users/me`);
   }
 
-  getUsername(): string | null {
+  getUserId(): number | null {
     const token = localStorage.getItem('token');
     if (!token) return null;
     try {
@@ -61,7 +61,7 @@ export class Auth {
   respondToFriendRequest(requestId: number, accept: boolean) {
     return this.http.post(`${this.apiUrl}/friends/request/respond`, {
       request_id: requestId,
-      accept,
+      accept: accept,
     });
   }
 

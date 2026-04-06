@@ -14,6 +14,7 @@ import { ShoppingList } from './features/shopping-list/shopping-list';
 import { Friends } from './features/friends/friends';
 import { Households } from './features/households/households';
 import { Recipe } from './features/recipe/recipe';
+import { ManageHousehold } from './features/households/manage-household/manage-household';
 
 export const routes: Routes = [
   {
@@ -22,8 +23,8 @@ export const routes: Routes = [
     children: [
       { path: 'login', component: Login, canActivate: [guestGuard] },
       { path: 'register', component: Register, canActivate: [guestGuard] },
-      { path: '', redirectTo: '/login', pathMatch: 'full' }
-    ]
+      { path: '', redirectTo: '/login', pathMatch: 'full' },
+    ],
   },
   {
     path: 'app',
@@ -33,12 +34,13 @@ export const routes: Routes = [
       { path: 'settings', component: Settings, canActivate: [authGuard] },
       { path: 'recipes/discover', component: DiscoverRecipes, canActivate: [authGuard] },
       { path: 'recipes/saved', component: SavedRecipes, canActivate: [authGuard] },
-      { path: 'household/inventory', component: Inventory, canActivate: [authGuard] },
-      { path: 'household/meal-plan', component: MealPlan, canActivate: [authGuard] },
-      { path: 'household/shopping-list', component: ShoppingList, canActivate: [authGuard] },
+      { path: 'households/inventory', component: Inventory, canActivate: [authGuard] },
+      { path: 'households/meal-plan', component: MealPlan, canActivate: [authGuard] },
+      { path: 'households/shopping-list', component: ShoppingList, canActivate: [authGuard] },
       { path: 'friends', component: Friends, canActivate: [authGuard] },
       { path: 'households', component: Households, canActivate: [authGuard] },
-      { path: 'recipe', component: Recipe, canActivate: [authGuard] }
-    ]
-  }
+      { path: 'recipe', component: Recipe, canActivate: [authGuard] },
+      { path: 'households/manage', component: ManageHousehold, canActivate: [authGuard] },
+    ],
+  },
 ];
