@@ -4,20 +4,18 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import models, auth, database
 
-# English comment: Create database tables on startup
 models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Allow Angular dev server
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# English comment: This class defines the structure of the JSON body
 class UserSchema(BaseModel):
     username: str
     password: str
@@ -31,7 +29,6 @@ def get_db():
 
 @app.post("/register")
 def register(user_data: UserSchema = Body(...), db: Session = Depends(get_db)):
-    # Accessing data from the JSON body object
     db_user = db.query(models.User).filter(models.User.username == user_data.username).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Username already exists")
@@ -46,7 +43,6 @@ def register(user_data: UserSchema = Body(...), db: Session = Depends(get_db)):
 def login(user_data: UserSchema = Body(...), db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.username == user_data.username).first()
     
-    # Verification happens against the clean string from the body
     if not user or not auth.verify_password(user_data.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
@@ -55,7 +51,6 @@ def login(user_data: UserSchema = Body(...), db: Session = Depends(get_db)):
 
 @app.get("/users/me")
 def read_users_me(current_user: models.User = Depends(auth.get_current_user)):
-    # This only runs if the token is valid
     return {
         "id": current_user.id,
         "username": current_user.username,
