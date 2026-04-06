@@ -90,9 +90,6 @@ def get_households(
         .filter(models.HouseholdMember.user_id == user_id)\
         .all()
 
-    if not households:
-        raise HTTPException(status_code=404, detail="Not a member of any household")
-
     return households
 
 # Send invitation
