@@ -25,12 +25,12 @@
   <div>
     @if (household.id) {
       <ul>
-        @for (member of household.members; track member.id) {
+        @for (member of members; track member.id) {
           <div class="flex items-center justify-between rounded-2xl">
             <!-- Avatar -->
             <app-avatar
               [imageSrc]="'https://picsum.photos/200/300'"
-              [username]="member.user_id"
+              [username]="member.username"
               [subtitle]="member.is_admin ? 'Admin' : ''"
             ></app-avatar>
             <!-- Button Elements -->

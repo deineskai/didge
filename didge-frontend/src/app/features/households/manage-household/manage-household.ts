@@ -24,6 +24,7 @@ export class ManageHousehold implements OnInit {
   household: any = {};
   current_user_id: number | null = 0;
   firstFriend: any = {};
+  members: any[] = [];
 
   ngOnInit() {
     this.current_user_id = this.auth.getUserId();
@@ -46,10 +47,30 @@ export class ManageHousehold implements OnInit {
     this.householdService.getHousehold(id).subscribe({
       next: (data) => {
         this.household = data;
+        this.loadHouseholdMembers();
         this.cdr.detectChanges();
       },
       error: (err) => {
         this.household = null;
+      },
+    });
+  }
+
+  loadHouseholdMembers() {
+    let memberIds = this.household.members.map((member: any) => member.user_id);
+    this.userService.getPublicUserProfiles(memberIds).subscribe({
+      next: (data: any) => {
+        this.members = data.map((apiMember: any) => {
+          const localInfo = this.household.members.find((m: any) => m.user_id === apiMember.id);
+          return {
+            ...apiMember,
+            is_admin: localInfo?.is_admin || false,
+          };
+        });
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error(err);
       },
     });
   }

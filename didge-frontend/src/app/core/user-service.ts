@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -9,6 +9,14 @@ export class UserService {
 
   getUserProfile() {
     return this.http.get(`${this.apiUrl}/users/me`);
+  }
+
+  getPublicUserProfiles(userIds: []) {
+    let params = new HttpParams();
+    userIds.forEach((id) => {
+      params = params.append('user_ids', id);
+    });
+    return this.http.get(`${this.apiUrl}/users/public`, { params });
   }
 
   getFriends() {
