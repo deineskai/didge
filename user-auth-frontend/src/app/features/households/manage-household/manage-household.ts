@@ -6,6 +6,7 @@ import { ContentPageLayout } from '../../../shared/layouts/content-page-layout/c
 import { Router } from '@angular/router';
 import { Auth } from '../../../core/auth';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../../core/user-service';
 
 @Component({
   selector: 'app-manage-household',
@@ -19,6 +20,7 @@ export class ManageHousehold implements OnInit {
   householdService = inject(HouseholdService);
   cdr = inject(ChangeDetectorRef);
   auth = inject(Auth);
+  userService = inject(UserService);
   household: any = {};
   current_user_id: number | null = 0;
   firstFriend: any = {};
@@ -31,7 +33,7 @@ export class ManageHousehold implements OnInit {
         this.loadHousehold(Number(id));
       }
     });
-    this.auth.getFriends().subscribe({
+    this.userService.getFriends().subscribe({
       next: (friends) => {
         if (friends && friends.length > 0) {
           this.firstFriend = friends[0];
@@ -82,7 +84,7 @@ export class ManageHousehold implements OnInit {
   inviteToHouseholdModalLoading = false;
   inviteToHouseholdModalUserId: number = 0;
 
-  friends = this.auth.getFriends();
+  friends = this.userService.getFriends();
 
   openInviteToHouseholdModal() {
     this.inviteToHouseholdModalError = '';

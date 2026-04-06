@@ -5,6 +5,7 @@ import { Auth } from '../../core/auth';
 import { ContentPageLayout } from '../../shared/layouts/content-page-layout/content-page-layout';
 import { Avatar } from '../../shared/components/avatar/avatar';
 import { HouseholdService } from '../../core/household-service';
+import { UserService } from '../../core/user-service';
 
 @Component({
   selector: 'app-friends',
@@ -13,9 +14,10 @@ import { HouseholdService } from '../../core/household-service';
   styleUrl: './friends.css',
 })
 export class Friends implements OnInit {
-  private auth = inject(Auth);
-  private cdr = inject(ChangeDetectorRef);
+  auth = inject(Auth);
+  cdr = inject(ChangeDetectorRef);
   householdService = inject(HouseholdService);
+  userService = inject(UserService);
   firstHousehold: any;
 
   activeTab = signal<'friends' | 'incoming' | 'outgoing'>('friends');
@@ -50,19 +52,19 @@ export class Friends implements OnInit {
   }
 
   load() {
-    this.auth.getFriends().subscribe({
+    this.userService.getFriends().subscribe({
       next: (data) => {
         this.friends = data;
         this.cdr.detectChanges();
       },
     });
-    this.auth.getIncomingRequests().subscribe({
+    this.userService.getIncomingRequests().subscribe({
       next: (data) => {
         this.incomingRequests = data;
         this.cdr.detectChanges();
       },
     });
-    this.auth.getOutgoingRequests().subscribe({
+    this.userService.getOutgoingRequests().subscribe({
       next: (data) => {
         this.outgoingRequests = data;
         this.cdr.detectChanges();
@@ -80,7 +82,7 @@ export class Friends implements OnInit {
     if (!this.addFriendModalUsername.trim()) return;
     this.addFriendModalLoading = true;
     this.addFriendModalError = '';
-    this.auth.sendFriendRequest(this.addFriendModalUsername.trim()).subscribe({
+    this.userService.sendFriendRequest(this.addFriendModalUsername.trim()).subscribe({
       next: () => {
         this.addFriendModalOpen = false;
         this.addFriendModalLoading = false;
@@ -96,7 +98,7 @@ export class Friends implements OnInit {
   }
 
   respond(requestId: number, accept: boolean) {
-    this.auth.respondToFriendRequest(requestId, accept).subscribe({
+    this.userService.respondToFriendRequest(requestId, accept).subscribe({
       next: () => {
         this.load();
       },
@@ -104,7 +106,7 @@ export class Friends implements OnInit {
   }
 
   revoke(requestId: number) {
-    this.auth.revokeFriendRequest(requestId).subscribe({
+    this.userService.revokeFriendRequest(requestId).subscribe({
       next: () => {
         this.load();
       },
@@ -112,7 +114,7 @@ export class Friends implements OnInit {
   }
 
   remove(friend_user_id: number) {
-    this.auth.removeFriend(friend_user_id).subscribe({
+    this.userService.removeFriend(friend_user_id).subscribe({
       next: () => {
         this.load();
       },
