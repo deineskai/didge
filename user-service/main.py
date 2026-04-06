@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status, Body
+from fastapi import FastAPI, Depends, HTTPException, status, Body, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -56,6 +56,11 @@ def read_users_me(current_user: models.User = Depends(auth.get_current_user)):
         "username": current_user.username,
         "message": "This data came securely from the database!"
     }
+
+@app.get("/users/public")
+def read_users_public(user_ids: list[int] = Query(...), db: Session = Depends(get_db)):
+    users = db.query(models.User).filter(models.User.id.in_(user_ids)).all()
+    return [{"id": u.id, "username": u.username} for u in users]
 
 
 @app.post("/friends/request")
