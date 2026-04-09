@@ -5,9 +5,9 @@ services:
       dockerfile: Dockerfile
     container_name: user-service
     ports:
-      - "8001:8000"
+      - "127.0.0.1:8001:8000"
     restart: always
-    environment:
+    # environment:
     #  - DATABASE_URL=db_url
 
   household-service:
@@ -16,9 +16,9 @@ services:
       dockerfile: Dockerfile
     container_name: household-service
     ports:
-      - "8002:8000"
+      - "127.0.0.1:8002:8000"
     restart: always
-    environment:
+    # environment:
     #  - DATABASE_URL=db_url
 
   frontend:
