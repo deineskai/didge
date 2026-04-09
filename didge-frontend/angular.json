@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "user-auth-frontend": {
+    "didge-frontend": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -64,10 +64,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "user-auth-frontend:build:production"
+              "buildTarget": "didge-frontend:build:production"
             },
             "development": {
-              "buildTarget": "user-auth-frontend:build:development"
+              "buildTarget": "didge-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"

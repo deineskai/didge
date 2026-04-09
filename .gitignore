@@ -1,3 +1,4 @@
 *.db
 *.env
 __pycache__/
+docker-compose.override.yml
