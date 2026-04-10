@@ -3,7 +3,7 @@ services:
     build:
       context: ./user-service
       dockerfile: Dockerfile
-    container_name: user-service
+    container_name: didge-user-service
     ports:
       - "127.0.0.1:8001:8000"
     restart: always
@@ -14,7 +14,7 @@ services:
     build:
       context: ./household-service
       dockerfile: Dockerfile
-    container_name: household-service
+    container_name: didge-household-service
     ports:
       - "127.0.0.1:8002:8000"
     restart: always

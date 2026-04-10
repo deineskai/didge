@@ -1,7 +1,7 @@
 services:
   user-service:
     image: ghcr.io/deineskai/didge/user-service:latest
-    container_name: user-service
+    container_name: didge-user-service
     ports:
       - "127.0.0.1:8001:8000"
     restart: always
@@ -10,7 +10,7 @@ services:
 
   household-service:
     image: ghcr.io/deineskai/didge/household-service:latest
-    container_name: household-service
+    container_name: didge-household-service
     ports:
       - "127.0.0.1:8002:8000"
     restart: always
