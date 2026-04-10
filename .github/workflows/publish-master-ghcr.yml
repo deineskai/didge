@@ -1,0 +1,55 @@
+name: Build and Push Images to GHCR
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME_PREFIX: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # --- BUILD USER SERVICE ---
+      - name: Build and push User Service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./user-service
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/user-service:latest
+
+      # --- BUILD HOUSEHOLD SERVICE ---
+      - name: Build and push Household Service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./household-service
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/household-service:latest
+
+      # --- BUILD FRONTEND ---
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./didge-frontend
+          push: true
+          # Hier geben wir unser Build-Argument mit
+          build-args: |
+            BUILD_ENV=production
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/frontend:latest

@@ -1,0 +1,28 @@
+services:
+  user-service:
+    image: ghcr.io/deineskai/didge/user-service:latest
+    container_name: user-service
+    ports:
+      - "127.0.0.1:8001:8000"
+    restart: always
+    # environment:
+    #  - DATABASE_URL=db_url
+
+  household-service:
+    image: ghcr.io/deineskai/didge/household-service:latest
+    container_name: household-service
+    ports:
+      - "127.0.0.1:8002:8000"
+    restart: always
+    # environment:
+    #  - DATABASE_URL=db_url
+
+  frontend:
+    image: ghcr.io/deineskai/didge/frontend:latest
+    container_name: didge-frontend
+    ports:
+      - "8080:80"
+    restart: always
+    # environment:
+    #  - USER_API_URL=url
+    #  - HOUSEHOLD_API_URL=url
