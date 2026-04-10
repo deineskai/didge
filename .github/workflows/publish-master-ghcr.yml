@@ -33,7 +33,7 @@ jobs:
         with:
           context: ./user-service
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/user-service:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-user-service:latest
 
       # --- BUILD HOUSEHOLD SERVICE ---
       - name: Build and push Household Service
@@ -41,7 +41,7 @@ jobs:
         with:
           context: ./household-service
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/household-service:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-household-service:latest
 
       # --- BUILD FRONTEND ---
       - name: Build and push Frontend
