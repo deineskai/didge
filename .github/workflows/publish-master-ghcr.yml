@@ -86,6 +86,7 @@ jobs:
             echo "USER_SERVICE_PORT=9001" >> $GITHUB_OUTPUT
             echo "HOUSEHOLD_SERVICE_PORT=9002" >> $GITHUB_OUTPUT
             echo "FRONTEND_PORT=9000" >> $GITHUB_OUTPUT
+          fi
 
       # Copy the deployment configuration to the server
       - name: Copy docker-compose.deploy.yml to server
