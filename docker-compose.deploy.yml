@@ -5,8 +5,10 @@ services:
     ports:
       - "127.0.0.1:8001:8000"
     restart: always
-    # environment:
-    #  - DATABASE_URL=db_url
+    environment:
+      - DATABASE_URL=sqlite:////data/users.db
+    volumes:
+      - ./db:/data
 
   household-service:
     image: ghcr.io/deineskai/didge/household-service:latest
@@ -14,8 +16,10 @@ services:
     ports:
       - "127.0.0.1:8002:8000"
     restart: always
-    # environment:
-    #  - DATABASE_URL=db_url
+    environment:
+      - DATABASE_URL=sqlite:////data/households.db
+    volumes:
+      - ./db:/data
 
   frontend:
     image: ghcr.io/deineskai/didge/frontend:latest
