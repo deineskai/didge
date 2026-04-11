@@ -1,6 +1,6 @@
 services:
   user-service:
-    image: ghcr.io/deineskai/didge/user-service:latest
+    image: ghcr.io/deineskai/didge/didge-user-service:latest
     container_name: didge-user-service
     ports:
       - "127.0.0.1:8001:8000"
@@ -11,7 +11,7 @@ services:
       - ./db:/data
 
   household-service:
-    image: ghcr.io/deineskai/didge/household-service:latest
+    image: ghcr.io/deineskai/didge/didge-household-service:latest
     container_name: didge-household-service
     ports:
       - "127.0.0.1:8002:8000"
@@ -22,7 +22,7 @@ services:
       - ./db:/data
 
   frontend:
-    image: ghcr.io/deineskai/didge/frontend:latest
+    image: ghcr.io/deineskai/didge/didgefrontend:latest
     container_name: didge-frontend
     ports:
       - "8080:80"

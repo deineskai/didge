@@ -52,7 +52,7 @@ jobs:
           # Hier geben wir unser Build-Argument mit
           build-args: |
             BUILD_ENV=production
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/frontend:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
