@@ -1,9 +1,9 @@
 services:
   user-service:
-    image: ghcr.io/deineskai/didge/didge-user-service:latest
+    image: ghcr.io/deineskai/didge/didge-user-service:${IMAGE_TAG}
     container_name: didge-user-service
     ports:
-      - "127.0.0.1:8001:8000"
+      - "127.0.0.1:${USER_SERVICE_PORT}:8000"
     restart: always
     environment:
       - DATABASE_URL=sqlite:////data/users.db
@@ -11,10 +11,10 @@ services:
       - ./db:/data
 
   household-service:
-    image: ghcr.io/deineskai/didge/didge-household-service:latest
+    image: ghcr.io/deineskai/didge/didge-household-service:${IMAGE_TAG}
     container_name: didge-household-service
     ports:
-      - "127.0.0.1:8002:8000"
+      - "127.0.0.1:${HOUSEHOLD_SERVICE_PORT}:8000"
     restart: always
     environment:
       - DATABASE_URL=sqlite:////data/households.db
@@ -22,10 +22,10 @@ services:
       - ./db:/data
 
   frontend:
-    image: ghcr.io/deineskai/didge/didgefrontend:latest
+    image: ghcr.io/deineskai/didge/didgefrontend:${IMAGE_TAG}
     container_name: didge-frontend
     ports:
-      - "8080:80"
+      - "127.0.0.1:${FRONTEND_PORT}:80"
     restart: always
     # environment:
     #  - USER_API_URL=url

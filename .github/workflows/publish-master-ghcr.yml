@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - staging
 
 env:
   REGISTRY: ghcr.io
@@ -17,6 +18,14 @@ jobs:
       packages: write
 
     steps:
+      - name: Set Tag
+        id: vars
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
+            echo "TAG=latest" >> $GITHUB_OUTPUT
+          elif [[ "${GITHUB_REF}" == "refs/heads/staging" ]]; then
+            echo "TAG=staging" >> $GITHUB_OUTPUT
+          fi
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -33,7 +42,7 @@ jobs:
         with:
           context: ./user-service
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-user-service:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-user-service:${{ steps.vars.outputs.TAG }}
 
       # --- BUILD HOUSEHOLD SERVICE ---
       - name: Build and push Household Service
@@ -41,7 +50,7 @@ jobs:
         with:
           context: ./household-service
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-household-service:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-household-service:${{ steps.vars.outputs.TAG }}
 
       # --- BUILD FRONTEND ---
       - name: Build and push Frontend
@@ -52,7 +61,7 @@ jobs:
           # Hier geben wir unser Build-Argument mit
           build-args: |
             BUILD_ENV=production
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-frontend:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-frontend:${{ steps.vars.outputs.TAG }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -62,6 +71,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set Env Vars
+        id: envs
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
+            echo "DIR=prod" >> $GITHUB_OUTPUT
+            echo "IMAGE_TAG=latest" >> $GITHUB_OUTPUT
+            echo "USER_SERVICE_PORT=8001" >> $GITHUB_OUTPUT
+            echo "HOUSEHOLD_SERVICE_PORT=8002" >> $GITHUB_OUTPUT
+            echo "FRONTEND_PORT=8000" >> $GITHUB_OUTPUT
+          elif [[ "${GITHUB_REF}" == "refs/heads/staging" ]]; then
+            echo "DIR=staging" >> $GITHUB_OUTPUT
+            echo "IMAGE_TAG=staging" >> $GITHUB_OUTPUT
+            echo "USER_SERVICE_PORT=9001" >> $GITHUB_OUTPUT
+            echo "HOUSEHOLD_SERVICE_PORT=9002" >> $GITHUB_OUTPUT
+            echo "FRONTEND_PORT=9000" >> $GITHUB_OUTPUT
+
       # Copy the deployment configuration to the server
       - name: Copy docker-compose.deploy.yml to server
         uses: appleboy/scp-action@v0.1.7
@@ -70,7 +95,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: docker-compose.deploy.yml
-          target: /home/gh-deployer/didge/docker-compose.deploy.yml
+          target: /home/gh-deployer/didge/${{ steps.envs.outputs.DIR }}/docker-compose.deploy.yml
 
       # SSH into the server and deploy the new images
       - name: Deploy to Server via SSH
@@ -80,7 +105,13 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/gh-deployer/didge
-            docker compose -f docker-compose.deploy.yml pull
-            docker compose -f docker-compose.deploy.yml up -d
+            cd /home/gh-deployer/didge/${{ steps.envs.outputs.DIR }}
+
+            export IMAGE_TAG=${{ steps.envs.outputs.IMAGE_TAG }}
+            export USER_SERVICE_PORT=${{ steps.envs.outputs.USER_SERVICE_PORT }}
+            export HOUSEHOLD_SERVICE_PORT=${{ steps.envs.outputs.HOUSEHOLD_SERVICE_PORT }}
+            export FRONTEND_PORT=${{ steps.envs.outputs.FRONTEND_PORT }}
+
+            docker compose -p didge-${{ steps.envs.outputs.DIR }} -f docker-compose.deploy.yml pull
+            docker compose -p didge-${{ steps.envs.outputs.DIR }} -f docker-compose.deploy.yml up -d --remove-orphans
             docker image prune -f
