@@ -79,13 +79,13 @@ jobs:
             echo "IMAGE_TAG=latest" >> $GITHUB_OUTPUT
             echo "USER_SERVICE_PORT=8001" >> $GITHUB_OUTPUT
             echo "HOUSEHOLD_SERVICE_PORT=8002" >> $GITHUB_OUTPUT
-            echo "FRONTEND_PORT=8000" >> $GITHUB_OUTPUT
+            echo "FRONTEND_PORT=8080" >> $GITHUB_OUTPUT
           elif [[ "${GITHUB_REF}" == "refs/heads/staging" ]]; then
             echo "DIR=staging" >> $GITHUB_OUTPUT
             echo "IMAGE_TAG=staging" >> $GITHUB_OUTPUT
             echo "USER_SERVICE_PORT=9001" >> $GITHUB_OUTPUT
             echo "HOUSEHOLD_SERVICE_PORT=9002" >> $GITHUB_OUTPUT
-            echo "FRONTEND_PORT=9000" >> $GITHUB_OUTPUT
+            echo "FRONTEND_PORT=9080" >> $GITHUB_OUTPUT
           fi
 
       # Copy the deployment configuration to the server
