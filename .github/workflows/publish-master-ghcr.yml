@@ -96,7 +96,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: docker-compose.deploy.yml
-          target: /home/gh-deployer/didge/${{ steps.envs.outputs.DIR }}/docker-compose.deploy.yml
+          target: /home/gh-deployer/didge/${{ steps.envs.outputs.DIR }}/
 
       # SSH into the server and deploy the new images
       - name: Deploy to Server via SSH
