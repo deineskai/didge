@@ -22,7 +22,7 @@ services:
       - ./db:/data
 
   frontend:
-    image: ghcr.io/deineskai/didge/didgefrontend:${IMAGE_TAG}
+    image: ghcr.io/deineskai/didge/didge-frontend:${IMAGE_TAG}
     container_name: didge-frontend
     ports:
       - "127.0.0.1:${FRONTEND_PORT}:80"
