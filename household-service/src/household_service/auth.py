@@ -7,6 +7,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 SECRET_KEY = "DEVELOPMENT_SECRET_KEY"
 ALGORITHM = "HS256"
 
+
 def get_current_user_id(token: str = Depends(oauth2_scheme)):
     try:
         # Token dekodieren und Signatur prüfen
@@ -17,4 +18,3 @@ def get_current_user_id(token: str = Depends(oauth2_scheme)):
         return int(user_id)
     except Exception:
         raise HTTPException(status_code=401, detail="Could not validate credentials")
-

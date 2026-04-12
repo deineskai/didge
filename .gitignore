@@ -3,3 +3,6 @@ dev-db/
 *.env
 __pycache__/
 docker-compose.override.yml
+.venv/
+.ruff_cache/
+*/.vscode/
