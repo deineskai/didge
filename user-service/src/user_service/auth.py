@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-import database, models
+from user_service import database, models
 
 # Use direct bcrypt library to avoid passlib 72-byte bug
 SECRET_KEY = "DEVELOPMENT_SECRET_KEY"
