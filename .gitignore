@@ -1,3 +1,4 @@
+dev-db/
 *.db
 *.env
 __pycache__/

@@ -13,7 +13,7 @@ RUN pip install poetry
 # Disable virtualenv creation by poetry (not needed inside a container)
 ENV POETRY_VIRTUALENVS_CREATE=false
 
-WORKDIR /app
+WORKDIR app
 
 # Copy dependency files first (for better caching)
 COPY pyproject.toml poetry.lock* /app/
@@ -37,4 +37,6 @@ COPY . .
 EXPOSE 8000
 
 # Start the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+WORKDIR /app
+ENV PYTHONPATH=/app/src
+CMD ["uvicorn", "user_service.main:app", "--host", "0.0.0.0", "--port", "8000", "--app-dir", "src"]

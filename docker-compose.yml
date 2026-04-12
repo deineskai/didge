@@ -23,7 +23,7 @@ services:
 
   frontend:
     build:
-      context: ./didge-frontend
+      context: ./frontend
       dockerfile: Dockerfile
       args:
         - BUILD_ENV=production
