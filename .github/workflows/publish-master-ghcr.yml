@@ -59,7 +59,7 @@ jobs:
           context: ./frontend
           push: true
           build-args: |
-            BUILD_ENV=${{ steps.vars.outputs.TAG == 'latest' ? 'production' : 'staging' }}
+            BUILD_ENV=${{ steps.vars.outputs.TAG == 'latest' && 'production' || 'staging' }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-frontend:${{ steps.vars.outputs.TAG }}
 
   deploy:
