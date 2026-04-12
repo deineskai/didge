@@ -7,7 +7,7 @@ import { initFlowbite } from 'flowbite';
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App implements OnInit {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}

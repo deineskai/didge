@@ -10,6 +10,12 @@
     <div
       class="h-full px-3 py-4 overflow-y-auto bg-white dark:bg-gray-800 shadow-sm border-r border-gray-200 dark:border-gray-700"
     >
+      @if (!production) {
+        <div class="flex items-center p-2 bg-red-800 text-yellow-500 rounded-lg">
+          <div class="w-6 h-6">🚧</div>
+          <span class="ms-1">STAGING</span>
+        </div>
+      }
       <ul class="space-y-2 font-medium">
         <!--
             <app-nav-item [routerLink]="'/app/recipes/discover'" [text]="'Discover'">
@@ -21,6 +27,7 @@
                 </app-nav-icon>
             </app-nav-item>
             -->
+
         <li>
           <a
             routerLink="/app/recipes/discover"

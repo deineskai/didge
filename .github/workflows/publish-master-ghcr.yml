@@ -56,11 +56,10 @@ jobs:
       - name: Build and push Frontend
         uses: docker/build-push-action@v5
         with:
-          context: ./didge-frontend
+          context: ./frontend
           push: true
-          # Hier geben wir unser Build-Argument mit
           build-args: |
-            BUILD_ENV=production
+            BUILD_ENV=${{ steps.vars.outputs.TAG == 'latest' ? 'production' : 'staging' }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-frontend:${{ steps.vars.outputs.TAG }}
 
   deploy:

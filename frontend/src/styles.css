@@ -18,3 +18,15 @@ body {
     font-size: 16px !important;
   }
 }
+
+:root {
+  --banner-height: 0px;
+}
+
+body.has-staging-banner {
+  --banner-height: 40px;
+}
+
+.navbar.fixed-top {
+  top: var(--banner-height) !important;
+}
