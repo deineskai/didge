@@ -19,107 +19,33 @@
           <div class="w-6 h-6">🚧</div>
         </div>
       }
-      <ul class="space-y-2 font-medium">
-        <li>
-          <a
-            routerLink="/app/recipes/discover"
-            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition"
-            (click)="layoutService.toggleSidebar()"
-          >
-            <app-nav-icon name="discover" [strokeWidth]="0" />
-            <span class="ms-3">Discover</span>
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/app/recipes/saved"
-            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition"
-            (click)="layoutService.toggleSidebar()"
-          >
-            <app-nav-icon name="saved" [strokeWidth]="0" />
-            <span class="flex-1 ms-3 whitespace-nowrap">Saved</span>
-            <!--
-                <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span>
-                -->
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/app/households/meal-plan"
-            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition"
-            (click)="layoutService.toggleSidebar()"
-          >
-            <app-nav-icon name="meal-plan" [strokeWidth]="0" />
-            <span class="flex-1 ms-3 whitespace-nowrap">Meal Plan</span>
-            <!--
-                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
-                -->
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/app/households/inventory"
-            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition"
-            (click)="layoutService.toggleSidebar()"
-          >
-            <app-nav-icon name="inventory" [strokeWidth]="0" />
-            <span class="flex-1 ms-3 whitespace-nowrap">Inventory</span>
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/app/households/shopping-list"
-            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition"
-            (click)="layoutService.toggleSidebar()"
-          >
-            <app-nav-icon name="shopping-list" [strokeWidth]="0" />
-            <span class="flex-1 ms-3 whitespace-nowrap">Shopping List</span>
-          </a>
-        </li>
-      </ul>
-      <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
-        <li>
-          <a
-            routerLink="/app/friends"
-            class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group transition"
-            (click)="layoutService.toggleSidebar()"
-          >
-            <app-nav-icon name="friends" [strokeWidth]="0" />
-            <span class="ms-3">Friends</span>
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/app/households"
-            class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group transition"
-            (click)="layoutService.toggleSidebar()"
-          >
-            <app-nav-icon name="households" [strokeWidth]="0" />
-            <span class="ms-3">Households</span>
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/app/settings"
-            class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group transition"
-            (click)="layoutService.toggleSidebar()"
-          >
-            <app-nav-icon name="settings" [strokeWidth]="0" />
-            <span class="ms-3">Settings</span>
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/login"
-            (click)="logout()"
-            class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group transition"
-            (click)="layoutService.toggleSidebar()"
-          >
-            <app-nav-icon name="logout" [strokeWidth]="0" [fill]="'none'" />
-            <span class="ms-3">Log Out</span>
-          </a>
-        </li>
-      </ul>
+
+      @for (navSection of navSections; track navSection) {
+        <ul
+          [class]="
+            !$first
+              ? 'space-y-2 font-medium pt-4 mt-2 border-t border-gray-700'
+              : 'space-y-2 font-medium'
+          "
+        >
+          @for (navItem of navSection.items; track navItem) {
+            <li>
+              <a
+                routerLink="{{ navItem.route }}"
+                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition"
+                (click)="navItem.action ? navItem.action() : layoutService.toggleSidebar()"
+              >
+                <app-nav-icon
+                  [name]="navItem.icon"
+                  [strokeWidth]="0"
+                  [fill]="navItem.fill ? navItem.fill : 'currentColor'"
+                ></app-nav-icon>
+                <span class="ms-3">{{ navItem.label }}</span>
+              </a>
+            </li>
+          }
+        </ul>
+      }
     </div>
   </aside>
 
