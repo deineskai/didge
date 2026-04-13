@@ -13,8 +13,7 @@
         <app-icon
           (click)="layoutService.toggleSidebar()"
           name="chevron-left"
-          [strokeWidth]="1"
-          class=" "
+          fill="none"
           [class.hidden]="layoutService.isSidebarOpen()"
         />
       </app-round-button>
@@ -30,12 +29,12 @@
       <!-- Share Button -->
       <app-round-button [transparent]="true">
         <div class="w-6 h-6 ml-1 mt-2">
-          <app-icon name="share" [strokeWidth]="1" />
+          <app-icon name="share" fill="none" />
         </div>
       </app-round-button>
       <!-- More Button -->
       <app-round-button [transparent]="true">
-        <app-icon name="more" [strokeWidth]="2" />
+        <app-icon name="more" [strokeWidth]="2" fill="none" />
       </app-round-button>
     </div>
   </div>
@@ -50,69 +49,21 @@
       <!-- Left -->
       <div class="flex gap-4 mx-6 my-3">
         <app-round-button (click)="layoutService.toggleSidebar()" class="sm:hidden">
-          <app-nav-icon>
-            <svg
-              class="w-8 h-8 text-white"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1"
-                d="m14 8-4 4 4 4"
-              />
-            </svg>
-          </app-nav-icon>
+          <app-icon
+            (click)="layoutService.toggleSidebar()"
+            name="chevron-left"
+            fill="none"
+            [class.hidden]="layoutService.isSidebarOpen()"
+          />
         </app-round-button>
       </div>
       <!-- Right -->
       <div class="flex gap-4 mx-6 my-3">
         <app-round-button>
-          <app-nav-icon>
-            <svg
-              class="ml-0.5 pt-1 w-7 h-7 text-white"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1"
-                d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8"
-              />
-            </svg>
-          </app-nav-icon>
+          <app-icon name="share" fill="none" [class]="'ml-0.5 pt-1 w-7 h-7'" />
         </app-round-button>
         <app-round-button>
-          <app-nav-icon>
-            <svg
-              class="w-8 h-8 text-white"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="2"
-                d="M6 12h.01m6 0h.01m5.99 0h.01"
-              />
-            </svg>
-          </app-nav-icon>
+          <app-icon name="more" [strokeWidth]="2" fill="none" />
         </app-round-button>
       </div>
     </div>
@@ -129,6 +80,7 @@
             (click)="layoutService.toggleSidebar()"
             name="chevron-left"
             [strokeWidth]="1"
+            fill="none"
             class=" "
             [class.hidden]="layoutService.isSidebarOpen()"
           />
@@ -139,28 +91,28 @@
         <!-- Share Button -->
         <app-round-button [transparent]="true">
           <div class="w-6 h-6 ml-1 mt-1">
-            <app-icon name="share" [strokeWidth]="1" />
+            <app-icon name="share" [strokeWidth]="1" fill="none" />
           </div>
         </app-round-button>
         <!-- More Button -->
         <app-round-button [transparent]="true">
-          <app-icon name="more" [strokeWidth]="2" />
+          <app-icon name="more" [strokeWidth]="2" fill="none" />
         </app-round-button>
       </div>
     </div>
   </div>
 }
-
 <!-- Main Content -->
 <div class="p-8">
   <div class="sticky top-0 bg-gray-50 dark:bg-gray-900 pb-6 flex items-center justify-between">
+    <!-- Page Title -->
     <h1 class="text-2xl font-bold">{{ title }}</h1>
-
+    <!-- Page Actions (e.g. Buttons)-->
     <div class="flex items-center gap-2">
       <ng-content select="[pageActions]"></ng-content>
     </div>
   </div>
-
+  <!-- Actual Page Content -->
   <div class="overflow-hidden">
     <ng-content></ng-content>
   </div>
