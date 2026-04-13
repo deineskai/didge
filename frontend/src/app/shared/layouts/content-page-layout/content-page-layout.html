@@ -1,107 +1,81 @@
-<!-- Header Bar (visible when scrolled)-->
+<!-- Cover Image -->
+@if (coverImageSource != null) {
+  <div class="relative inline-block max-h-80 w-full overflow-hidden">
+    <img src="{{ coverImageSource }}" class="w-full h-[25vh] object-cover" alt="Cover Image" />
+  </div>
+} @else {
+  <div class="relative inline-block h-14 max-h-80 w-full overflow-hidden"></div>
+}
+
+<!-- Header Bar -->
 <div
-  class="fixed top-0 left-0 sm:left-64 right-0 h-14 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-250 ease-in-out transform flex z-20 scroll-appearance"
-  [class.opacity-100]="isScrolled"
-  [class.opacity-0]="!isScrolled"
+  class="fixed top-0 left-0 sm:left-64 right-0 h-14 transition-all duration-250 ease-in-out flex z-20 scroll-appearance"
+  [class.bg-gray-50]="isScrolled"
+  [class.dark:bg-gray-900]="isScrolled"
+  [class.bg-transparent]="!isScrolled"
   [class.no-transition]="!isScrolled"
+  [class.shadow-sm]="isScrolled"
 >
   <div class="flex justify-between items-center w-full">
     <!-- Left -->
     <div class="flex items-center">
       <!-- Sidebar Toggle -->
-      <app-round-button [transparent]="true" class="ml-6 my-3 sm:hidden">
+      <app-round-button
+        [transparent]="coverImageSource === null || isScrolled"
+        class="ml-6 my-3 sm:hidden transition-none"
+      >
         <app-icon
           (click)="layoutService.toggleSidebar()"
           name="chevron-left"
           fill="none"
           [class.hidden]="layoutService.isSidebarOpen()"
+          [stroke]="coverImageSource != null && !isScrolled ? '#fff' : 'currentColor'"
         />
       </app-round-button>
       <!-- Page Title -->
-      <div class="ml-2 sm:ml-8">
+      <div
+        class="ml-2 sm:ml-8 transition-all duration-250 ease-in-out"
+        [class.opacity-0]="!isScrolled"
+        [class.opacity-100]="isScrolled"
+        [class.no-transition]="!isScrolled"
+      >
         <h1 class="text-md font-regular">
           {{ title }}
         </h1>
       </div>
     </div>
     <!-- Right -->
-    <div class="flex items-center gap-4 mx-6 my-3 inset-x-0">
+    <div class="flex gap-4 mx-6 my-3">
       <!-- Share Button -->
-      <app-round-button [transparent]="true">
-        <div class="w-6 h-6 ml-1 mt-2">
-          <app-icon name="share" fill="none" />
+      <app-round-button
+        [transparent]="coverImageSource === null || isScrolled"
+        class="transition-none"
+      >
+        <div class="w-8 h-8 flex items-center justify-center">
+          <app-icon
+            name="share"
+            fill="none"
+            class="w-6 h-6"
+            [stroke]="coverImageSource != null && !isScrolled ? '#fff' : 'currentColor'"
+          />
         </div>
       </app-round-button>
       <!-- More Button -->
-      <app-round-button [transparent]="true">
-        <app-icon name="more" [strokeWidth]="2" fill="none" />
+      <app-round-button
+        [transparent]="coverImageSource === null || isScrolled"
+        class="transition-none"
+      >
+        <app-icon
+          name="more"
+          [strokeWidth]="2"
+          fill="none"
+          [stroke]="coverImageSource != null && !isScrolled ? '#fff' : 'currentColor'"
+        />
       </app-round-button>
     </div>
   </div>
 </div>
 
-@if (coverImageSource != null) {
-  <div class="relative inline-block max-h-80 w-full overflow-hidden">
-    <!-- Cover Image -->
-    <img src="{{ coverImageSource }}" class="w-full h-[25vh] object-cover" alt="Cover Image" />
-    <!-- Control Elements -->
-    <div class="absolute top-0 left-0 flex justify-between w-full">
-      <!-- Left -->
-      <div class="flex gap-4 mx-6 my-3">
-        <app-round-button (click)="layoutService.toggleSidebar()" class="sm:hidden">
-          <app-icon
-            (click)="layoutService.toggleSidebar()"
-            name="chevron-left"
-            fill="none"
-            [class.hidden]="layoutService.isSidebarOpen()"
-          />
-        </app-round-button>
-      </div>
-      <!-- Right -->
-      <div class="flex gap-4 mx-6 my-3">
-        <app-round-button>
-          <app-icon name="share" fill="none" [class]="'ml-0.5 pt-1 w-7 h-7'" />
-        </app-round-button>
-        <app-round-button>
-          <app-icon name="more" [strokeWidth]="2" fill="none" />
-        </app-round-button>
-      </div>
-    </div>
-  </div>
-} @else {
-  <div class="relative inline-block h-14 max-h-80 w-full overflow-hidden">
-    <!-- Control Elements -->
-    <div class="absolute top-0 left-0 flex justify-between w-full">
-      <!-- Left -->
-      <div class="flex gap-4 mx-6 my-3">
-        <!-- Sidebar Toggle -->
-        <app-round-button [transparent]="true" class="sm:visible sm:hidden">
-          <app-icon
-            (click)="layoutService.toggleSidebar()"
-            name="chevron-left"
-            [strokeWidth]="1"
-            fill="none"
-            class=" "
-            [class.hidden]="layoutService.isSidebarOpen()"
-          />
-        </app-round-button>
-      </div>
-      <!-- Right -->
-      <div class="flex gap-4 mx-6 my-3">
-        <!-- Share Button -->
-        <app-round-button [transparent]="true">
-          <div class="w-6 h-6 ml-1 mt-1">
-            <app-icon name="share" [strokeWidth]="1" fill="none" />
-          </div>
-        </app-round-button>
-        <!-- More Button -->
-        <app-round-button [transparent]="true">
-          <app-icon name="more" [strokeWidth]="2" fill="none" />
-        </app-round-button>
-      </div>
-    </div>
-  </div>
-}
 <!-- Main Content -->
 <div class="p-8">
   <div class="sticky top-0 bg-gray-50 dark:bg-gray-900 pb-6 flex items-center justify-between">

@@ -43,9 +43,10 @@ export class Icon {
   @Input() strokeWidth: number = 1;
   @Input() fill: string = 'currentColor';
   @Input() class: string = '';
+  @Input() stroke: string = 'currentColor';
 
   get svg(): SafeHtml {
-    const raw = `<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="${this.class}" fill="${this.fill}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="${this.strokeWidth}">${ICONS[this.name] ?? ''}</svg>`;
+    const raw = `<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="${this.class}" fill="${this.fill}" viewBox="0 0 24 24" stroke="${this.stroke}" stroke-width="${this.strokeWidth}">${ICONS[this.name] ?? ''}</svg>`;
     return this.sanitizer.bypassSecurityTrustHtml(raw);
   }
 }
