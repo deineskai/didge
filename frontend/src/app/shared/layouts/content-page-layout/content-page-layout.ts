@@ -1,12 +1,11 @@
 import { Component, HostListener, Input, inject } from '@angular/core';
-import { NavIcon } from '../../components/nav-icon/nav-icon';
 import { LayoutService } from '../../layout-service';
 import { RoundButton } from '../../components/round-button/round-button';
 import { Icon } from '../../components/icon/icon';
 
 @Component({
   selector: 'app-content-page-layout',
-  imports: [NavIcon, RoundButton, Icon],
+  imports: [RoundButton, Icon],
   templateUrl: './content-page-layout.html',
   styleUrl: './content-page-layout.css',
 })
