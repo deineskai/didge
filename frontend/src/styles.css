@@ -42,10 +42,11 @@ body {
     background-color: rgba(0, 0, 0, 0.4);
   }
 }
+
 /* Desktop Emoji Picker */
 .picker-wrapper {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
   border-radius: 9px;
-  overflow: hidden; /* Damit die Ecken des Pickers sauber abgerundet sind */
-  margin-top: 8px; /* Kleiner Abstand zum Button */
+  overflow: hidden;
+  margin-top: 8px;
 }
