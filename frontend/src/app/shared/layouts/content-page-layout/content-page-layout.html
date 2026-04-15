@@ -78,6 +78,44 @@
 
 <!-- Main Content -->
 <div class="p-8">
+  <!-- Emoji Page Icon -->
+  <div class="relative">
+    <button
+      type="button"
+      class="text-6xl absolute top-0 left-0 -translate-x-2 -translate-y-12 z-10 hover:scale-110 transition-transform p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+      [class.-translate-y-20]="coverImageSource != null"
+      [class.sm:-translate-y-16]="coverImageSource == null"
+      cdkOverlayOrigin
+      #trigger="cdkOverlayOrigin"
+      (click)="showEmojiPicker = !showEmojiPicker"
+    >
+      {{ pageIcon }}
+    </button>
+
+    <!-- Emoji Picker-->
+    <ng-template
+      cdkConnectedOverlay
+      [cdkConnectedOverlayScrollStrategy]="blockScrollStrategy"
+      [cdkConnectedOverlayPanelClass]="['mobile-emoji-picker', 'desktop-emoji-picker']"
+      backdropClass="cdk-overlay-transparent-backdrop"
+      [cdkConnectedOverlayOrigin]="trigger"
+      [cdkConnectedOverlayOpen]="showEmojiPicker"
+      [cdkConnectedOverlayHasBackdrop]="true"
+      (backdropClick)="showEmojiPicker = false"
+      (detach)="showEmojiPicker = false"
+    >
+      <div class="picker-wrapper">
+        <emoji-mart
+          set="twitter"
+          [style]="{ width: '100vw', maxWidth: '400px' }"
+          (emojiSelect)="setEmoji($event); showEmojiPicker = false"
+        >
+        </emoji-mart>
+      </div>
+    </ng-template>
+  </div>
+  <div class="h-8"></div>
+
   <div class="sticky top-0 bg-gray-50 dark:bg-gray-900 pb-6 flex items-center justify-between">
     <!-- Page Title -->
     <h1 class="text-2xl font-bold">{{ title }}</h1>

@@ -2,10 +2,12 @@ import { Component, HostListener, Input, inject } from '@angular/core';
 import { LayoutService } from '../../layout-service';
 import { RoundButton } from '../../components/round-button/round-button';
 import { Icon } from '../../components/icon/icon';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { Overlay, OverlayModule, CdkOverlayOrigin, ScrollStrategy } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-content-page-layout',
-  imports: [RoundButton, Icon],
+  imports: [RoundButton, Icon, PickerComponent, OverlayModule, CdkOverlayOrigin],
   templateUrl: './content-page-layout.html',
   styleUrl: './content-page-layout.css',
 })
@@ -14,6 +16,21 @@ export class ContentPageLayout {
   isScrolled = window.scrollY > 0;
   @Input() title: string = 'Page Title';
   @Input() coverImageSource: string | null = null;
+  @Input() pageIcon: string = '';
+  blockScrollStrategy: ScrollStrategy;
+  showEmojiPicker: boolean = false;
+
+  constructor(private overlay: Overlay) {
+    this.blockScrollStrategy = this.overlay.scrollStrategies.block();
+  }
+
+  toggleEmojiPicker() {
+    this.showEmojiPicker = !this.showEmojiPicker;
+  }
+
+  setEmoji(event: any) {
+    this.pageIcon = event.emoji.native;
+  }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
