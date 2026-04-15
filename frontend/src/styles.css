@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import '@ctrl/ngx-emoji-mart/picker';
 @plugin "flowbite/plugin";
 
 app-login,
@@ -17,4 +18,34 @@ body {
   textarea {
     font-size: 16px !important;
   }
+}
+
+/* Mobile Emoji Picker */
+@media (max-width: 600px) {
+  .cdk-overlay-pane {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    transform: none !important;
+  }
+
+  .emoji-mart {
+    max-width: 600px !important;
+    width: 100% !important;
+  }
+
+  .cdk-overlay-transparent-backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}
+/* Desktop Emoji Picker */
+.picker-wrapper {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 9px;
+  overflow: hidden; /* Damit die Ecken des Pickers sauber abgerundet sind */
+  margin-top: 8px; /* Kleiner Abstand zum Button */
 }
