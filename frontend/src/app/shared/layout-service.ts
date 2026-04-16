@@ -15,7 +15,20 @@ export class LayoutService {
     this.pageTitle.set(title);
   }
 
-  isAppleDevice(): boolean {
-    return /Mac|iPhone|iPod|iPad/.test(navigator.userAgent);
+  /**
+   * @returns 'linux' | 'apple' | 'windows' | 'android' | 'other'
+   */
+  getUserAgent(): 'linux' | 'apple' | 'windows' | 'android' | 'other' {
+    const userAgent = navigator.userAgent.toLowerCase();
+
+    if (userAgent.includes('android')) {
+      return 'android';
+    } else if (/mac|iphone|ipad|ipod/.test(userAgent)) {
+      return 'apple';
+    } else if (userAgent.includes('win')) {
+      return 'windows';
+    } else if (userAgent.includes('linux')) {
+      return 'linux';
+    } else return 'other';
   }
 }
