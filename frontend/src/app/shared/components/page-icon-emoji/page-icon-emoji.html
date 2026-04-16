@@ -1,0 +1,39 @@
+@if (emojiId != null) {
+  <div class="relative">
+    <!-- Emoji Button / Page Icon -->
+    <button
+      type="button"
+      class="text-6xl absolute top-0 left-0 -translate-x-2 -translate-y-12 z-10 p-2"
+      [class.-translate-y-20]="adjustForCoverImage"
+      [class.sm:-translate-y-16]="adjustForCoverImage"
+      cdkOverlayOrigin
+      #trigger="cdkOverlayOrigin"
+      (click)="showEmojiPicker = !showEmojiPicker"
+    >
+      <!-- Eomji / Icon -->
+      <ngx-emoji [emoji]="emojiId" [isNative]="false" [set]="'twitter'" [size]="64"> </ngx-emoji>
+    </button>
+
+    <!-- Emoji Picker-->
+    <ng-template
+      cdkConnectedOverlay
+      [cdkConnectedOverlayScrollStrategy]="blockScrollStrategy"
+      [cdkConnectedOverlayPanelClass]="['mobile-emoji-picker', 'desktop-emoji-picker']"
+      backdropClass="cdk-overlay-transparent-backdrop"
+      [cdkConnectedOverlayOrigin]="trigger"
+      [cdkConnectedOverlayOpen]="showEmojiPicker"
+      [cdkConnectedOverlayHasBackdrop]="true"
+      (backdropClick)="showEmojiPicker = false"
+      (detach)="showEmojiPicker = false"
+    >
+      <div class="picker-wrapper">
+        <emoji-mart
+          [set]="'twitter'"
+          [style]="{ width: '100vw', maxWidth: '400px' }"
+          (emojiSelect)="setEmoji($event); showEmojiPicker = false"
+        >
+        </emoji-mart>
+      </div>
+    </ng-template>
+  </div>
+}
