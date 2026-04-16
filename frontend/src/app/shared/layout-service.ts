@@ -14,4 +14,8 @@ export class LayoutService {
   setPageTitle(title: string) {
     this.pageTitle.set(title);
   }
+
+  isAppleDevice(): boolean {
+    return /Mac|iPhone|iPod|iPad/.test(navigator.userAgent);
+  }
 }
