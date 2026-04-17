@@ -2,11 +2,11 @@ import { Component, Input } from '@angular/core';
 import { Overlay, OverlayModule, ScrollStrategy } from '@angular/cdk/overlay';
 
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
-import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { EmojiService } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Component({
   selector: 'app-page-icon-emoji',
-  imports: [PickerComponent, EmojiComponent, OverlayModule],
+  imports: [PickerComponent, OverlayModule],
   templateUrl: './page-icon-emoji.html',
   styleUrl: './page-icon-emoji.css',
 })
@@ -15,7 +15,10 @@ export class PageIconEmoji {
   @Input() emojiId: string | null = null;
   @Input() adjustForCoverImage: boolean = false;
 
-  constructor(private overlay: Overlay) {
+  constructor(
+    private overlay: Overlay,
+    private emojiService: EmojiService,
+  ) {
     this.blockScrollStrategy = this.overlay.scrollStrategies.block();
   }
 
@@ -27,5 +30,12 @@ export class PageIconEmoji {
 
   setEmoji(event: any) {
     this.emojiId = event.emoji.id;
+  }
+
+  getEmojiSvgUrl(id: string): string {
+    const emojiData = this.emojiService.getData(id);
+    if (!emojiData || !emojiData.unified) return '';
+    const unicode = emojiData.unified.toLowerCase();
+    return `https://abs.twimg.com/emoji/v2/svg/${unicode}.svg`;
   }
 }
