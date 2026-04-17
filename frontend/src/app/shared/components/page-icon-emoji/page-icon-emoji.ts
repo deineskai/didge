@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { Overlay, OverlayModule, ScrollStrategy } from '@angular/cdk/overlay';
+import { PickerComponent, PickerModule } from '@ctrl/ngx-emoji-mart';
 
-import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Component({
   selector: 'app-page-icon-emoji',
-  imports: [PickerComponent, OverlayModule],
+  imports: [PickerComponent, OverlayModule, PickerModule],
   templateUrl: './page-icon-emoji.html',
   styleUrl: './page-icon-emoji.css',
 })
