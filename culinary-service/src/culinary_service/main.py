@@ -1,8 +1,7 @@
-from fastapi import FastAPI, Depends, HTTPException, Body
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session, joinedload
-from sqlalchemy import exists
-from culinary_service import models, database, auth
+from sqlalchemy.orm import Session
+from culinary_service import models, database, auth, schemas, services
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -157,172 +156,53 @@ def get_db():
         db.close()
 
 
-# Endpoints
-
-
-@app.get("/culinary-units")
+@app.get("/culinary-units", response_model=list[schemas.CulinaryUnitRead])
 def get_culinary_units(db: Session = Depends(get_db)):
-    return db.query(models.CulinaryUnit).all()
+    return services.get_all_units(db)
 
 
-@app.get("/culinary-tags")
+@app.get("/culinary-tags", response_model=list[schemas.CulinaryTagRead])
 def get_culinary_tags(db: Session = Depends(get_db)):
-    return db.query(models.CulinaryTag).all()
+    return services.get_all_tags(db)
 
 
-@app.post("/culinary-tags")
-def add_culinary_tags(tags: list[str] = Body(...), db: Session = Depends(get_db)):
-    # TODO: implement method
-    return
+@app.post("/culinary-tags", status_code=201)
+def add_culinary_tags(
+    tag_data: schemas.CulinaryTagCreate, db: Session = Depends(get_db)
+):
+    try:
+        tag = services.create_culinary_tag(db, tag_data)
+        return {"message": "Culinary tag created successfully", "id": tag.id}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.get("/culinery-items/recipes")
+@app.get("/culinary-items/recipes", response_model=list[schemas.RecipeRead])
 def get_recipes(db: Session = Depends(get_db)):
-    recipes = (
-        db.query(models.CulinaryItem)
-        .filter(models.CulinaryItem.compositions.any())
-        .options(joinedload(models.CulinaryItem.culinary_unit))
-        .all()
-    )
-    return recipes
+    return services.get_all_recipes(db)
 
 
-@app.get("/culinary-items")
-def get_culinary_item(id: int, db: Session = Depends(get_db)):
-    item = (
-        db.query(models.CulinaryItem)
-        .filter(models.CulinaryItem.id == id)
-        .options(
-            # Lädt die Compositions UND das darin enthaltene CulinaryItem
-            joinedload(models.CulinaryItem.compositions).joinedload(
-                models.CulinaryItemComposition.contained_item
-            ),
-            # Lädt die Einheiten der Compositions (ebenfalls wichtig!)
-            joinedload(models.CulinaryItem.compositions).joinedload(
-                models.CulinaryItemComposition.unit
-            ),
-            joinedload(models.CulinaryItem.instructions),
-            joinedload(models.CulinaryItem.culinary_unit),
-            joinedload(models.CulinaryItem.diet),
-            joinedload(models.CulinaryItem.tags),
-        )
-        .first()
-    )
+@app.get("/culinary-items/ingredients", response_model=list[schemas.IngredientRead])
+def get_ingredients(db: Session = Depends(get_db)):
+    return services.get_base_ingredients(db)
 
+
+@app.get("/culinary-items/{item_id}", response_model=schemas.CulinaryItemRead)
+def get_culinary_item(item_id: int, db: Session = Depends(get_db)):
+    item = services.get_culinary_item_by_id(db, item_id)
     if not item:
-        raise HTTPException(status_code=404, detail="Culinary item not found")
-
+        raise HTTPException(
+            status_code=404, detail=f"Culinary item with ID {item_id} not found"
+        )
     return item
 
 
-@app.get("/culinary-items/ingredients")
-def get_ingredients(db: Session = Depends(get_db)):
-    recipes = (
-        db.query(models.CulinaryItem)
-        .filter(~models.CulinaryItem.compositions.any())
-        .all()
-    )
-    return recipes
-
-
-@app.post("/culinary-items")
+@app.post("/culinary-items", status_code=201)
 def add_culinary_item(
-    name: str = Body(...),
-    icon_id: str | None = Body(None),
-    image_url: str | None = Body(None),
-    culinary_unit_id: int = Body(...),
-    quantity: float = Body(...),
-    tag_ids: list[int] = Body(...),
-    instructions: list[models.InstructionSchema] | None = Body([]),
-    ingredients: list[models.ItemCompositionSchema] | None = Body([]),
-    db: Session = Depends(get_db),
+    item_data: schemas.CulinaryItemCreate, db: Session = Depends(get_db)
 ):
-    tags = db.query(models.CulinaryTag).filter(models.CulinaryTag.id.in_(tag_ids)).all()
-
-    if len(tags) != len(tag_ids):
-        raise HTTPException(status_code=400, detail="One or more tags not found")
-
-    if db.query(models.CulinaryItem).filter(models.CulinaryItem.name == name).first():
-        raise HTTPException(
-            status_code=400, detail="Culinary item with this name already exists"
-        )
-
-    if (
-        not db.query(models.CulinaryUnit)
-        .filter(models.CulinaryUnit.id == culinary_unit_id)
-        .first()
-    ):
-        raise HTTPException(status_code=400, detail="Culinary unit not found")
-
-    db_item = models.CulinaryItem(
-        name=name,
-        icon_id=icon_id,
-        image_url=image_url,
-        culinary_unit_id=culinary_unit_id,
-        quantity=quantity,
-        tags=tags,
-    )
-    db.add(db_item)
-    db.flush()
-
-    if ingredients:
-        add_ingredients(db_item, ingredients, db)
-        add_diet(db_item, ingredients, db)
-
-    if instructions:
-        add_instructions(db_item, instructions, db)
-
-    db.commit()
-    db.refresh(db_item)
-    return "Culinary item created successfully"
-
-
-def add_ingredients(
-    containing_item: models.CulinaryItem,
-    ingredients: list[models.ItemCompositionSchema],
-    db: Session,
-):
-    for ingredient in ingredients:
-        item = models.CulinaryItemComposition(
-            containing_item_id=containing_item.id,
-            contained_item_id=ingredient.contained_item_id,
-            unit_id=ingredient.unit_id,
-            quantity=ingredient.quantity,
-        )
-        db.add(item)
-
-
-def add_diet(
-    containing_item: models.CulinaryItem,
-    ingredients: list[models.ItemCompositionSchema],
-    db: Session,
-):
-    item_ids = [ing.contained_item_id for ing in ingredients]
-    db_ingredients = (
-        db.query(models.CulinaryItem).filter(models.CulinaryItem.id.in_(item_ids)).all()
-    )
-
-    diet = models.DietFlag(
-        item_id=containing_item.id,
-        vegan=all(ing.diet.vegan for ing in db_ingredients),
-        vegetarian=all(ing.diet.vegetarian for ing in db_ingredients),
-        gluten_free=all(ing.diet.gluten_free for ing in db_ingredients),
-    )
-    db.add(diet)
-
-
-def add_instructions(
-    culinary_item: models.CulinaryItem,
-    instructions: list[models.InstructionSchema],
-    db: Session,
-):
-    if instructions and len(instructions) > 0:
-        for instruction in instructions:
-            db.add(
-                models.CulinaryInstruction(
-                    item_id=culinary_item.id,
-                    step_number=instruction.step_number,
-                    summary=instruction.summary,
-                    details=instruction.details,
-                )
-            )
+    try:
+        item = services.create_culinary_item(db, item_data)
+        return {"message": "Culinary item created successfully", "id": item.id}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))

@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, Table
 from sqlalchemy.orm import relationship
 from culinary_service.database import Base
-from pydantic import BaseModel
 
 
 culinary_item_tag_association = Table(
@@ -101,16 +100,3 @@ class CulinaryTag(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-
-
-class InstructionSchema(BaseModel):
-    step_number: int
-    summary: str
-    details: str
-
-
-class ItemCompositionSchema(BaseModel):
-    containing_item_id: int | None = None
-    contained_item_id: int
-    unit_id: int
-    quantity: float
