@@ -1,6 +1,10 @@
+import csv
+from pathlib import Path
 from sqlalchemy.orm import Session, joinedload
 from culinary_service import schemas
 from culinary_service import models
+
+# region Endpoint Functions
 
 
 def create_culinary_item(db: Session, item_data: schemas.CulinaryItemCreate):
@@ -12,6 +16,67 @@ def create_culinary_item(db: Session, item_data: schemas.CulinaryItemCreate):
     db.commit()
     db.refresh(db_item)
     return db_item
+
+
+def get_culinary_item_by_id(db: Session, item_id: int):
+    return (
+        db.query(models.CulinaryItem)
+        .filter(models.CulinaryItem.id == item_id)
+        .options(
+            joinedload(models.CulinaryItem.compositions).joinedload(
+                models.CulinaryItemComposition.contained_item
+            ),
+            joinedload(models.CulinaryItem.compositions).joinedload(
+                models.CulinaryItemComposition.unit
+            ),
+            joinedload(models.CulinaryItem.instructions),
+            joinedload(models.CulinaryItem.culinary_unit),
+            joinedload(models.CulinaryItem.diet),
+            joinedload(models.CulinaryItem.tags),
+        )
+        .first()
+    )
+
+
+def get_base_ingredients(db: Session):
+    return (
+        db.query(models.CulinaryItem)
+        .filter(~models.CulinaryItem.compositions.any())
+        .all()
+    )
+
+
+def get_all_recipes(db: Session):
+    return (
+        db.query(models.CulinaryItem)
+        .filter(models.CulinaryItem.compositions.any())
+        .options(joinedload(models.CulinaryItem.culinary_unit))
+        .all()
+    )
+
+
+def create_culinary_tag(db: Session, tag_data: schemas.CulinaryTagCreate):
+    if db.query(models.CulinaryItem).filter_by(name=tag_data.name).first():
+        raise ValueError("Culinary tag with this name already exists")
+
+    db_tag = models.CulinaryTag(name=tag_data.name)
+    db.add(db_tag)
+    db.commit()
+    db.refresh(db_tag)
+    return db_tag
+
+
+def get_all_units(db: Session):
+    return db.query(models.CulinaryUnit).all()
+
+
+def get_all_tags(db: Session):
+    return db.query(models.CulinaryTag).all()
+
+
+# endregion
+
+# region Helper Functions
 
 
 def validate_item_creation(db: Session, item_data: schemas.CulinaryItemCreate):
@@ -93,54 +158,6 @@ def add_diet(
     db.add(diet)
 
 
-def get_culinary_item_by_id(db: Session, item_id: int):
-    return (
-        db.query(models.CulinaryItem)
-        .filter(models.CulinaryItem.id == item_id)
-        .options(
-            joinedload(models.CulinaryItem.compositions).joinedload(
-                models.CulinaryItemComposition.contained_item
-            ),
-            joinedload(models.CulinaryItem.compositions).joinedload(
-                models.CulinaryItemComposition.unit
-            ),
-            joinedload(models.CulinaryItem.instructions),
-            joinedload(models.CulinaryItem.culinary_unit),
-            joinedload(models.CulinaryItem.diet),
-            joinedload(models.CulinaryItem.tags),
-        )
-        .first()
-    )
-
-
-def get_base_ingredients(db: Session):
-    return (
-        db.query(models.CulinaryItem)
-        .filter(~models.CulinaryItem.compositions.any())
-        .all()
-    )
-
-
-def get_all_recipes(db: Session):
-    return (
-        db.query(models.CulinaryItem)
-        .filter(models.CulinaryItem.compositions.any())
-        .options(joinedload(models.CulinaryItem.culinary_unit))
-        .all()
-    )
-
-
-def create_culinary_tag(db: Session, tag_data: schemas.CulinaryTagCreate):
-    if db.query(models.CulinaryItem).filter_by(name=tag_data.name).first():
-        raise ValueError("Culinary tag with this name already exists")
-
-    db_tag = models.CulinaryTag(name=tag_data.name)
-    db.add(db_tag)
-    db.commit()
-    db.refresh(db_tag)
-    return db_tag
-
-
 def add_instructions(
     culinary_item: models.CulinaryItem,
     instructions: list[models.InstructionSchema],
@@ -159,9 +176,77 @@ def add_instructions(
         db.add(db_instruction)
 
 
-def get_all_units(db: Session):
-    return db.query(models.CulinaryUnit).all()
+# endregion
+
+# region DB Seeding
 
 
-def get_all_tags(db: Session):
-    return db.query(models.CulinaryTag).all()
+def seed_from_csv(db: Session, model: type, file_path: str):
+    if db.query(model).count() > 0:
+        return
+
+    path = Path(file_path)
+    if not path.exists():
+        return
+
+    with open(path, mode="r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        items = []
+        for row in reader:
+            clean_row = {k: (None if v.strip() == "" else v) for k, v in row.items()}
+            items.append(model(**clean_row))
+
+        db.add_all(items)
+        db.commit()
+
+
+def seed_base_ingredients_from_csv(db: Session, file_path: str):
+    if db.query(models.CulinaryItem).count() > 0:
+        return
+
+    with open(file_path, mode="r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            # 1. Resolve tag
+            tag_ids = (
+                [int(tid) for tid in row["tag_ids"].split(",")]
+                if row["tag_ids"]
+                else []
+            )
+            tags = (
+                db.query(models.CulinaryTag)
+                .filter(models.CulinaryTag.id.in_(tag_ids))
+                .all()
+            )
+
+            # 2. Create Item
+            db_item = models.CulinaryItem(
+                name=row["name"],
+                icon_id=row["icon_id"] or None,
+                image_url=row.get("image_url") or None,
+                culinary_unit_id=int(row["culinary_unit_id"]),
+                quantity=float(row["quantity"]),
+                tags=tags,
+            )
+            db.add(db_item)
+            db.flush()
+
+            # 3. Create diet flags
+            diet = models.DietFlag(
+                item_id=db_item.id,
+                vegan=row["vegan"] == "1",
+                vegetarian=row["vegetarian"] == "1",
+                gluten_free=row["gluten_free"] == "1",
+            )
+            db.add(diet)
+
+        db.commit()
+
+
+def init_database_defaults(db: Session):
+    seed_from_csv(db, models.CulinaryUnit, "data/units.csv")
+    seed_from_csv(db, models.CulinaryTag, "data/tags.csv")
+    seed_base_ingredients_from_csv(db, "data/base_ingredients.csv")
+
+
+# endregion

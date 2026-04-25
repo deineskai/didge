@@ -1,0 +1,52 @@
+name,icon_id,culinary_unit_id,quantity,tag_ids,vegan,vegetarian,gluten_free
+Salt,salt,1,1.0,1,1,1,1
+Black Pepper,pepper,1,1.0,1,1,1,1
+All-purpose Flour,wheat,1,1.0,1,1,1,0
+White Sugar,sugar,1,1.0,1,1,1,1
+Brown Sugar,sugar,1,1.0,1,1,1,1
+Water,droplet,1,1.0,1,1,1,1
+Olive Oil,oil,3,1.0,1,1,1,1
+Sunflower Oil,oil,3,1.0,1,1,1,1
+Butter,butter,1,1.0,1,0,1,1
+Whole Milk,milk,3,1.0,1,0,1,1
+Heavy Cream,cream,3,1.0,1,0,1,1
+Egg,egg,1,60.0,1,0,1,1
+Yellow Onion,onion,1,100.0,1,1,1,1
+Red Onion,onion,1,100.0,1,1,1,1
+Garlic Clove,garlic,1,5.0,1,1,1,1
+Ginger,ginger,1,20.0,1,1,1,1
+Potato,potato,1,120.0,1,1,1,1
+Carrot,carrot,1,80.0,1,1,1,1
+Celery Stick,celery,1,40.0,1,1,1,1
+Bell Pepper Red,pepper,1,150.0,1,1,1,1
+Zucchini,zucchini,1,200.0,1,1,1,1
+Eggplant,eggplant,1,300.0,1,1,1,1
+Tomato,tomato,1,100.0,1,1,1,1
+Canned Tomatoes,can,1,400.0,1,1,1,1
+Tomato Paste,can,1,1.0,1,1,1,1
+White Rice,rice,1,1.0,1,1,1,1
+Basmati Rice,rice,1,1.0,1,1,1,1
+Spaghetti,pasta,1,1.0,1,1,1,0
+Penne,pasta,1,1.0,1,1,1,0
+Red Lentils,beans,1,1.0,1,1,1,1
+Chickpeas Canned,beans,1,240.0,1,1,1,1
+Vegetable Broth,soup,3,1.0,1,1,1,1
+Chicken Broth,soup,3,1.0,1,0,0,1
+Soy Sauce,bottle,3,1.0,1,1,1,0
+White Wine Vinegar,bottle,3,1.0,1,1,1,1
+Balsamic Vinegar,bottle,3,1.0,1,1,1,1
+Lemon,lemon,1,100.0,1,1,1,1
+Honey,honey,1,1.0,1,0,1,1
+Maple Syrup,syrup,1,1.0,1,1,1,1
+Baking Powder,powder,1,1.0,1,1,1,1
+Yeast Dry,powder,1,1.0,1,1,1,1
+Cornstarch,powder,1,1.0,1,1,1,1
+Paprika Powder,spice,1,1.0,1,1,1,1
+Cumin,spice,1,1.0,1,1,1,1
+Oregano Dried,herb,1,1.0,1,1,1,1
+Basil Fresh,herb,1,1.0,1,1,1,1
+Parsley Fresh,herb,1,1.0,1,1,1,1
+Parmesan Cheese,cheese,1,1.0,1,0,1,1
+Mozzarella,cheese,1,125.0,1,0,1,1
+Chicken Breast,meat,1,200.0,1,0,0,1
+Ground Beef,meat,1,1.0,1,0,0,1
