@@ -1,0 +1,23 @@
+[project]
+name = "culinary-service"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Kai Deines",email = "deines.kl@outlook.de"}
+]
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "sqlalchemy (>=2.0.49,<3.0.0)",
+    "fastapi (>=0.136.0,<0.137.0)",
+    "uvicorn (>=0.44.0,<0.45.0)",
+    "python-jose[cryptography] (>=3.5.0,<4.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "culinary_service", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
