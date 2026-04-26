@@ -19,6 +19,16 @@ services:
     volumes:
       - ./db:/data
 
+  culinary-service:
+    image: ghcr.io/deineskai/didge/didge-culinary-service:${IMAGE_TAG}
+    ports:
+      - "127.0.0.1:${CULINARY_SERVICE_PORT}:8000"
+    restart: always
+    environment:
+      - DATABASE_URL=sqlite:////data/culinary.db
+    volumes:
+      - ./db:/data
+
   frontend:
     image: ghcr.io/deineskai/didge/didge-frontend:${IMAGE_TAG}
     ports:

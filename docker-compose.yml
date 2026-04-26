@@ -21,6 +21,17 @@ services:
     # environment:
     #  - DATABASE_URL=db_url
 
+  culinary-service:
+    build:
+      context: ./culinary-service
+      dockerfile: Dockerfile
+    container_name: didge-culinary-service
+    ports:
+      - "127.0.0.1:8003:8000"
+    restart: always
+    # environment:
+    #  - DATABASE_URL=db_url
+
   frontend:
     build:
       context: ./frontend

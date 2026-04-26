@@ -52,6 +52,14 @@ jobs:
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-household-service:${{ steps.vars.outputs.TAG }}
 
+      # --- BUILD CULINARY SERVICE ---
+      - name: Build and push Culinary Service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./culinary-service
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/didge-culinary-service:${{ steps.vars.outputs.TAG }}
+
       # --- BUILD FRONTEND ---
       - name: Build and push Frontend
         uses: docker/build-push-action@v5
@@ -78,12 +86,14 @@ jobs:
             echo "IMAGE_TAG=latest" >> $GITHUB_OUTPUT
             echo "USER_SERVICE_PORT=8001" >> $GITHUB_OUTPUT
             echo "HOUSEHOLD_SERVICE_PORT=8002" >> $GITHUB_OUTPUT
+            echo "CULINARY_SERVICE_PORT=8003" >> $GITHUB_OUTPUT
             echo "FRONTEND_PORT=8080" >> $GITHUB_OUTPUT
           elif [[ "${GITHUB_REF}" == "refs/heads/staging" ]]; then
             echo "DIR=staging" >> $GITHUB_OUTPUT
             echo "IMAGE_TAG=staging" >> $GITHUB_OUTPUT
             echo "USER_SERVICE_PORT=9001" >> $GITHUB_OUTPUT
             echo "HOUSEHOLD_SERVICE_PORT=9002" >> $GITHUB_OUTPUT
+            echo "CULINARY_SERVICE_PORT=9003" >> $GITHUB_OUTPUT
             echo "FRONTEND_PORT=9080" >> $GITHUB_OUTPUT
           fi
 
