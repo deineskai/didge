@@ -244,9 +244,12 @@ def seed_base_ingredients_from_csv(db: Session, file_path: str):
 
 
 def init_database_defaults(db: Session):
-    seed_from_csv(db, models.CulinaryUnit, "data/units.csv")
-    seed_from_csv(db, models.CulinaryTag, "data/tags.csv")
-    seed_base_ingredients_from_csv(db, "data/base_ingredients.csv")
+    current_directory = Path(__file__).resolve().parent
+    seed_from_csv(db, models.CulinaryUnit, current_directory / "data" / "units.csv")
+    seed_from_csv(db, models.CulinaryTag, current_directory / "data" / "tags.csv")
+    seed_base_ingredients_from_csv(
+        db, current_directory / "data" / "base_ingredients.csv"
+    )
 
 
 # endregion
