@@ -3,7 +3,12 @@
   [emojiId]="recipe.icon_id"
   [coverImageSource]="recipe.image_url ? recipe.image_url : null"
 >
-  <p>recipe works!</p>
-  <p>Recipe ID: {{ recipe.id }}</p>
-  <p>{{ recipe.name }}</p>
+  <div class="flex flex-wrap w-full items-center gap-2">
+    @for (diet of diets; track diet) {
+      <app-badge [text]="diet" />
+    }
+    @for (tag of recipe.tags; track tag) {
+      <app-badge [text]="tag.name" />
+    }
+  </div>
 </app-content-page-layout>
