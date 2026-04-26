@@ -6,20 +6,30 @@
       <div
         class="max-w-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
       >
-        <a href="/app/recipe?id=43252">
+        <a [href]="'/app/recipe?id=' + recipe.id">
           <img
             class="rounded-t-lg max-h-[25vh] w-full object-cover"
-            src="{{ recipe.imageUrl }}"
+            src="{{ recipe.image_url }}"
             alt=""
           />
         </a>
         <div class="p-3">
-          <a href="/app/recipe?id=43252">
+          <a [href]="'/app/recipe?id=' + recipe.id">
             <h5 class="mb-2 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
               {{ recipe.name }}
             </h5>
           </a>
-          <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">This is a recipe</p>
+          @let combined =
+            [...culinaryService.getDietsAsStrings(recipe), ...recipe.tags.map(t => t.name)];
+          <div class="flex flex-wrap w-full items-center gap-2 pt-3">
+            @for (badge of combined.slice(0, 4); track $index) {
+              <app-badge [text]="badge" />
+            }
+            @if (combined.length > 4) {
+              <app-badge [text]="`+${combined.length - 4} more`" />
+              <span class="text-sm text-gray-500 font-medium"> </span>
+            }
+          </div>
         </div>
       </div>
     }
