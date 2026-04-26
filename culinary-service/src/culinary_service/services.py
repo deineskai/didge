@@ -31,7 +31,7 @@ def get_culinary_item_by_id(db: Session, item_id: int):
             ),
             joinedload(models.CulinaryItem.instructions),
             joinedload(models.CulinaryItem.culinary_unit),
-            joinedload(models.CulinaryItem.diet),
+            joinedload(models.CulinaryItem.diets),
             joinedload(models.CulinaryItem.tags),
         )
         .first()
@@ -118,7 +118,7 @@ def process_item_extensions(
 ):
     if item_data.ingredients:
         add_ingredients(db_item, item_data.ingredients, db)
-        add_diet(db_item, item_data.ingredients, db)
+        add_diets(db_item, item_data.ingredients, db)
 
     if item_data.instructions:
         add_instructions(db_item, item_data.instructions, db)
@@ -139,7 +139,7 @@ def add_ingredients(
         db.add(item)
 
 
-def add_diet(
+def add_diets(
     containing_item: models.CulinaryItem,
     ingredients: list[models.ItemCompositionSchema],
     db: Session,
@@ -149,13 +149,13 @@ def add_diet(
         db.query(models.CulinaryItem).filter(models.CulinaryItem.id.in_(item_ids)).all()
     )
 
-    diet = models.DietFlag(
+    diets = models.DietFlag(
         item_id=containing_item.id,
-        vegan=all(ing.diet.vegan for ing in db_ingredients),
-        vegetarian=all(ing.diet.vegetarian for ing in db_ingredients),
-        gluten_free=all(ing.diet.gluten_free for ing in db_ingredients),
+        vegan=all(ing.diets.vegan for ing in db_ingredients),
+        vegetarian=all(ing.diets.vegetarian for ing in db_ingredients),
+        gluten_free=all(ing.diets.gluten_free for ing in db_ingredients),
     )
-    db.add(diet)
+    db.add(diets)
 
 
 def add_instructions(
@@ -232,13 +232,13 @@ def seed_base_ingredients_from_csv(db: Session, file_path: str):
             db.flush()
 
             # 3. Create diet flags
-            diet = models.DietFlag(
+            diets = models.DietFlag(
                 item_id=db_item.id,
                 vegan=row["vegan"] == "1",
                 vegetarian=row["vegetarian"] == "1",
                 gluten_free=row["gluten_free"] == "1",
             )
-            db.add(diet)
+            db.add(diets)
 
         db.commit()
 

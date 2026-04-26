@@ -44,7 +44,7 @@ class CulinaryItemRead(BaseModel):
     icon_id: str | None
     image_url: str | None
     quantity: float
-    diet: DietFlagRead | None
+    diets: DietFlagRead | None
     tags: list[CulinaryTagRead] = []
     instructions: list[CulinaryInstructionRead] = []
 
@@ -67,8 +67,8 @@ class RecipeRead(BaseModel):
     name: str
     icon_id: str | None
     image_url: str | None
-    quantity: float
-    culinary_unit: CulinaryUnitRead
+    diets: DietFlagRead | None
+    tags: list[CulinaryTagRead] | None
 
     class Config:
         from_attributes = True

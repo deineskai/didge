@@ -31,7 +31,7 @@ class CulinaryItem(Base):
         back_populates="containing_item",
     )
     instructions = relationship("CulinaryInstruction", back_populates="item")
-    diet = relationship("DietFlag", back_populates="item", uselist=False)
+    diets = relationship("DietFlag", back_populates="item", uselist=False)
     tags = relationship("CulinaryTag", secondary=culinary_item_tag_association)
 
 
@@ -92,7 +92,7 @@ class DietFlag(Base):
     vegetarian = Column(Boolean)
     gluten_free = Column(Boolean)
 
-    item = relationship("CulinaryItem", back_populates="diet")
+    item = relationship("CulinaryItem", back_populates="diets")
 
 
 class CulinaryTag(Base):
