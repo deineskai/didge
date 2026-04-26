@@ -16,4 +16,29 @@ export class CulinaryService {
   getRecipeById(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/culinary-items/${id}`);
   }
+
+  getRecipes(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/culinary-items/recipes`);
+  }
+
+  getDietsAsStrings(recipe: any): string[] {
+    const diets = recipe.diets;
+
+    let keys = Object.keys(diets).filter((key) => diets[key] === true);
+
+    if (keys.includes('vegan')) {
+      keys = keys.filter((k) => k !== 'vegetarian');
+    }
+
+    return keys.map((key) => this.formatDietName(key));
+  }
+
+  formatDietName(key: string): string {
+    if (!key) return '';
+
+    return key
+      .split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Macht 'Gluten' und 'Free' daraus
+      .join('-');
+  }
 }
