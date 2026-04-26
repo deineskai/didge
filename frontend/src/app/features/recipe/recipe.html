@@ -1,8 +1,9 @@
 <app-content-page-layout
-  title="New Recipe"
-  emojiId="knife"
-  coverImageSource="{{ recipe.coverImageSrc }}"
+  [title]="recipe.name"
+  [emojiId]="recipe.icon_id"
+  [coverImageSource]="recipe.image_url ? recipe.image_url : null"
 >
   <p>recipe works!</p>
   <p>Recipe ID: {{ recipe.id }}</p>
+  <p>{{ recipe.name }}</p>
 </app-content-page-layout>
