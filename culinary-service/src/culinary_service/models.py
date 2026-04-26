@@ -15,7 +15,7 @@ class CulinaryItem(Base):
     __tablename__ = "culinary_items"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True, index=True)
+    name = Column(String, index=True)
     icon_id = Column(String, nullable=True)
     image_url = Column(String, nullable=True)
     culinary_unit_id = Column(Integer, ForeignKey("culinary_units.id"), nullable=False)

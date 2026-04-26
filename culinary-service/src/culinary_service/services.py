@@ -80,8 +80,6 @@ def get_all_tags(db: Session):
 
 
 def validate_item_creation(db: Session, item_data: schemas.CulinaryItemCreate):
-    if db.query(models.CulinaryItem).filter_by(name=item_data.name).first():
-        raise ValueError("Culinary item with this name already exists")
 
     if not db.query(models.CulinaryUnit).get(item_data.culinary_unit_id):
         raise ValueError("Culinary unit not found")
