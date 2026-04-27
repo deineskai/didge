@@ -29,6 +29,13 @@ class ItemCompositionCreate(BaseModel):
     quantity: float
 
 
+class ItemCompositionRead(BaseModel):
+    id: int
+    contained_item: CulinaryItemRead  # TODO: ensure recursion limit
+    unit: CulinaryUnitRead
+    quantity: float
+
+
 class DietFlagRead(BaseModel):
     vegan: bool
     vegetarian: bool
@@ -46,6 +53,7 @@ class CulinaryItemRead(BaseModel):
     quantity: float
     diets: DietFlagRead | None
     tags: list[CulinaryTagRead] = []
+    compositions: list[ItemCompositionRead] = []
     instructions: list[CulinaryInstructionRead] = []
 
     class Config:

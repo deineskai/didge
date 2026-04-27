@@ -161,7 +161,7 @@ def add_instructions(
     instructions: list[models.InstructionSchema],
     db: Session,
 ):
-    if not instructions or len(instructions) > 0:
+    if not instructions:
         return
 
     for instruction in instructions:

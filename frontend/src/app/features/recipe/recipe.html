@@ -3,7 +3,8 @@
   [emojiId]="recipe.icon_id"
   [coverImageSource]="recipe.image_url ? recipe.image_url : null"
 >
-  <div class="flex flex-wrap w-full items-center gap-2">
+  <!-- Tags -->
+  <div class="flex flex-wrap w-full items-center gap-2 pb-8">
     @for (diet of diets; track diet) {
       <app-badge [text]="diet" />
     }
@@ -11,4 +12,66 @@
       <app-badge [text]="tag.name" />
     }
   </div>
+  <!-- Ingredients -->
+  <h5 class="mb-2 pt-16 pb-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+    Ingredients
+  </h5>
+  <div class="relative overflow-x-auto shadow-md rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <thead class="text-xs uppercase bg-blue-50 dark:bg-blue-700 text-gray-900 dark:text-white">
+        <tr>
+          <th scope="col" class="px-6 py-3">Ingredient</th>
+          <th scope="col" class="px-6 py-3">Amount</th>
+          <th scope="col" class="px-6 py-3">Unit</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (ingredient of recipe.compositions; track ingredient.id; let isLast = $last) {
+          <tr
+            class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
+            [class.border-b]="!isLast"
+            [class.dark:border-gray-700]="!isLast"
+            [class.border-gray-200]="!isLast"
+          >
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              {{ ingredient.contained_item.name }}
+            </th>
+            <td class="px-6 py-4">{{ ingredient.quantity }}</td>
+            <td class="px-6 py-4">{{ ingredient.unit.abbreviation }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <!-- Instructions -->
+  <h5 class="mb-2 pt-16 pb-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+    Instructions
+  </h5>
+  <div class="grid grid-cols-1 gap-12">
+    @for (instruction of recipe.instructions; track instruction.step_number) {
+      <div class="relative flex items-center">
+        <div class="relative h-full">
+          <span
+            class="inline-flex m-1 mr-4 items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-gray-800 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-white"
+          >
+            {{ instruction.step_number }}
+            <span class="sr-only">Icon description</span>
+          </span>
+        </div>
+        <div>
+          <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+            {{ instruction.summary }}
+          </h5>
+
+          <p class="font-normal text-gray-700 dark:text-gray-400">
+            {{ instruction.details }}
+          </p>
+        </div>
+      </div>
+    }
+  </div>
+  <div class="h-100"></div>
 </app-content-page-layout>

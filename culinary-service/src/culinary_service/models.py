@@ -80,7 +80,7 @@ class CulinaryInstruction(Base):
     summary = Column(String, nullable=False)
     details = Column(String, nullable=False)
 
-    item = relationship("CulinaryItem")
+    item = relationship("CulinaryItem", back_populates="instructions")
 
 
 class DietFlag(Base):
