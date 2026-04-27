@@ -47,31 +47,33 @@
     </table>
   </div>
   <!-- Instructions -->
-  <h5 class="mb-2 pt-16 pb-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-    Instructions
-  </h5>
-  <div class="grid grid-cols-1 gap-12">
-    @for (instruction of recipe.instructions; track instruction.step_number) {
-      <div class="relative flex items-center">
-        <div class="relative h-full">
-          <span
-            class="inline-flex m-1 mr-4 items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-gray-800 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-white"
-          >
-            {{ instruction.step_number }}
-            <span class="sr-only">Icon description</span>
-          </span>
-        </div>
-        <div>
-          <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {{ instruction.summary }}
-          </h5>
+  <div class="min-h-[95dvh]">
+    <h5 class="mb-2 pt-16 pb-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+      Instructions
+    </h5>
 
-          <p class="font-normal text-gray-700 dark:text-gray-400">
-            {{ instruction.details }}
-          </p>
+    <div class="grid grid-cols-1 gap-12">
+      @for (instruction of recipe.instructions; track instruction.step_number) {
+        <div class="relative flex items-center">
+          <div class="relative h-full">
+            <span
+              class="inline-flex m-1 mr-4 items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-gray-800 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-white"
+            >
+              {{ instruction.step_number }}
+              <span class="sr-only">Icon description</span>
+            </span>
+          </div>
+          <div>
+            <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+              {{ instruction.summary }}
+            </h5>
+
+            <p class="font-normal text-gray-700 dark:text-gray-400">
+              {{ instruction.details }}
+            </p>
+          </div>
         </div>
-      </div>
-    }
+      }
+    </div>
   </div>
-  <div class="h-100"></div>
 </app-content-page-layout>
