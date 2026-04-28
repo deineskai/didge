@@ -135,6 +135,7 @@ jobs:
             export IMAGE_TAG=${{ steps.envs.outputs.IMAGE_TAG }}
             export USER_SERVICE_PORT=${{ steps.envs.outputs.USER_SERVICE_PORT }}
             export HOUSEHOLD_SERVICE_PORT=${{ steps.envs.outputs.HOUSEHOLD_SERVICE_PORT }}
+            export CULINARY_SERVICE_PORT=${{ steps.envs.outputs.CULINARY_SERVICE_PORT }}
             export FRONTEND_PORT=${{ steps.envs.outputs.FRONTEND_PORT }}
 
             docker compose -p didge-${{ steps.envs.outputs.DIR }} -f docker-compose.deploy.yml pull
