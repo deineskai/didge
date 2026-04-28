@@ -17,12 +17,13 @@
     Ingredients
   </h5>
   <div class="relative overflow-x-auto shadow-md rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table
+      class="w-full max-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+    >
       <thead class="text-xs uppercase bg-blue-50 dark:bg-blue-700 text-gray-900 dark:text-white">
         <tr>
-          <th scope="col" class="px-6 py-3">Ingredient</th>
           <th scope="col" class="px-6 py-3">Amount</th>
-          <th scope="col" class="px-6 py-3">Unit</th>
+          <th scope="col" class="px-6 py-3">Ingredient</th>
         </tr>
       </thead>
       <tbody>
@@ -33,14 +34,13 @@
             [class.dark:border-gray-700]="!isLast"
             [class.border-gray-200]="!isLast"
           >
+            <td class="px-6 py-4">{{ ingredient.quantity }} {{ ingredient.unit.abbreviation }}</td>
             <th
               scope="row"
               class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
               {{ ingredient.contained_item.name }}
             </th>
-            <td class="px-6 py-4">{{ ingredient.quantity }}</td>
-            <td class="px-6 py-4">{{ ingredient.unit.abbreviation }}</td>
           </tr>
         }
       </tbody>
@@ -74,6 +74,14 @@
           </div>
         </div>
       }
+    </div>
+    <div class="inline-flex items-center justify-center w-full pt-32">
+      <button
+        type="button"
+        class="flex gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold rounded-lg transition"
+      >
+        Mark as cooked
+      </button>
     </div>
   </div>
 </app-content-page-layout>
