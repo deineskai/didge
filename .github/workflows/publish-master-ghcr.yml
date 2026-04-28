@@ -31,6 +31,8 @@ jobs:
             echo "TAG=latest" >> $GITHUB_OUTPUT
           elif [[ "${GITHUB_REF}" == "refs/heads/staging" ]]; then
             echo "TAG=staging" >> $GITHUB_OUTPUT
+          else
+            echo "TAG=staging" >> $GITHUB_OUTPUT
           fi
       - name: Checkout repository
         uses: actions/checkout@v4
