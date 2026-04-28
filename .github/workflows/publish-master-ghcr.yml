@@ -5,6 +5,12 @@ on:
     branches:
       - master
       - staging
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: ""
+        required: false
+        default: ""
 
 env:
   REGISTRY: ghcr.io
