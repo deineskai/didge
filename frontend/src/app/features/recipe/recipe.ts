@@ -13,6 +13,7 @@ import { Badge } from '../../shared/components/badge/badge';
 export class Recipe implements OnInit {
   recipe: any = {};
   diets: string[] = [];
+  quantity: number = 1;
   private cdr = inject(ChangeDetectorRef);
 
   constructor(
@@ -33,9 +34,18 @@ export class Recipe implements OnInit {
     this.culinaryService.getRecipeById(id).subscribe({
       next: (data) => {
         this.recipe = data;
+        this.quantity = this.recipe.quantity;
         this.diets = this.culinaryService.getDietsAsStrings(this.recipe);
         this.cdr.detectChanges();
       },
     });
+  }
+
+  increaseQuantity() {
+    this.quantity++;
+  }
+
+  decreaseQuantity() {
+    this.quantity--;
   }
 }

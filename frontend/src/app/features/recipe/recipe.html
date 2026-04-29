@@ -13,9 +13,67 @@
     }
   </div>
   <!-- Ingredients -->
-  <h5 class="mb-2 pt-16 pb-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-    Ingredients
-  </h5>
+  <h5 class="pt-16 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Ingredients</h5>
+  <div class="flex items-center justify-between pb-2">
+    <h3>
+      for <span class="font-bold">{{ quantity }}</span> {{ recipe.unit.abbreviation }}
+    </h3>
+    <div class="inline-flex rounded-md shadow-xs" role="group">
+      <button
+        (click)="decreaseQuantity()"
+        type="button"
+        class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:text-white"
+      >
+        <svg
+          class="w-6 h-6 text-gray-800 dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 12h14"
+          />
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="px-4 py-2 w-16 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:text-white"
+      >
+        {{ quantity }}
+      </button>
+      <button
+        (click)="increaseQuantity()"
+        type="button"
+        class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:text-white"
+      >
+        <svg
+          class="w-6 h-6 text-gray-800 dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 12h14m-7 7V5"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
   <div class="relative overflow-x-auto shadow-md rounded-lg">
     <table
       class="w-full max-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
@@ -34,7 +92,10 @@
             [class.dark:border-gray-700]="!isLast"
             [class.border-gray-200]="!isLast"
           >
-            <td class="px-6 py-4">{{ ingredient.quantity }} {{ ingredient.unit.abbreviation }}</td>
+            <td class="px-6 py-4">
+              {{ ingredient.quantity * (quantity / recipe.quantity) }}
+              {{ ingredient.unit.abbreviation }}
+            </td>
             <th
               scope="row"
               class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
