@@ -30,7 +30,7 @@ def get_culinary_item_by_id(db: Session, item_id: int):
                 models.CulinaryItemComposition.unit
             ),
             joinedload(models.CulinaryItem.instructions),
-            joinedload(models.CulinaryItem.culinary_unit),
+            joinedload(models.CulinaryItem.unit),
             joinedload(models.CulinaryItem.diets),
             joinedload(models.CulinaryItem.tags),
         )
@@ -50,7 +50,7 @@ def get_all_recipes(db: Session):
     return (
         db.query(models.CulinaryItem)
         .filter(models.CulinaryItem.compositions.any())
-        .options(joinedload(models.CulinaryItem.culinary_unit))
+        .options(joinedload(models.CulinaryItem.unit))
         .all()
     )
 

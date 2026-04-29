@@ -23,7 +23,7 @@ class CulinaryItem(Base):
         Float, nullable=False
     )  # Yielding quantity (Recipe) / Base quantity (Ingredient)
 
-    culinary_unit = relationship("CulinaryUnit")
+    unit = relationship("CulinaryUnit")
 
     compositions = relationship(
         "CulinaryItemComposition",

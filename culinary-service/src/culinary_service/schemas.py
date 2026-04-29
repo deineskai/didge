@@ -51,6 +51,7 @@ class CulinaryItemRead(BaseModel):
     icon_id: str | None
     image_url: str | None
     quantity: float
+    unit: CulinaryUnitRead
     diets: DietFlagRead | None
     tags: list[CulinaryTagRead] = []
     compositions: list[ItemCompositionRead] = []
