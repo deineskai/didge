@@ -109,39 +109,44 @@
   </div>
   <!-- Instructions -->
   <div class="min-h-[95dvh]">
-    <h5 class="mb-2 pt-16 pb-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+    <h5 class="mb-2 pt-16 pb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
       Instructions
     </h5>
 
     <div class="grid grid-cols-1 gap-12">
       @for (instruction of recipe.instructions; track instruction.step_number) {
-        <div class="relative flex items-center">
-          <div class="relative h-full">
-            <span
-              class="inline-flex m-1 mr-4 items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-gray-800 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-white"
-            >
-              {{ instruction.step_number }}
-              <span class="sr-only">Icon description</span>
-            </span>
-          </div>
-          <div>
-            <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-              {{ instruction.summary }}
-            </h5>
-
-            <p class="font-normal text-gray-700 dark:text-gray-400">
-              {{ instruction.details }}
-            </p>
-          </div>
-        </div>
+        <app-editable-instruction
+          [stepNumber]="instruction.step_number"
+          [(summary)]="instruction.summary"
+          [(details)]="instruction.details"
+          [editMode]="editMode"
+        >
+        </app-editable-instruction>
       }
     </div>
-    <div class="inline-flex items-center justify-center w-full pt-32">
+
+    <!-- Action Buttons -->
+    <div class="inline-flex items-center justify-center w-full pt-32 pb-8">
       <button
         type="button"
         class="flex gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold rounded-lg transition"
+        [class.hidden]="editMode"
       >
         Mark as cooked
+      </button>
+      <button
+        type="button"
+        class="flex gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold rounded-lg transition"
+        [class.hidden]="!editMode"
+      >
+        Save Changes
+      </button>
+      <button
+        (click)="toggleEditMode()"
+        type="button"
+        class="flex gap-2 px-4 py-2 bg-yellow-700 hover:bg-yellow-800 text-white text-sm font-semibold rounded-lg transition"
+      >
+        Toggle Edit Mode
       </button>
     </div>
   </div>
