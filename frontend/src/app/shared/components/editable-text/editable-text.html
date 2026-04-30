@@ -1,0 +1,12 @@
+<textarea
+  [(ngModel)]="value"
+  (ngModelChange)="onChange($event)"
+  (blur)="onTouched()"
+  cdkTextareaAutosize
+  #autosize="cdkTextareaAutosize"
+  cdkAutosizeMinRows="1"
+  [attr.maxlength]="maxlength"
+  class="block bg-transparent !w-full p-0 text-gray-900 dark:text-white border-none rounded focus:outline-none focus:ring-0 resize-none"
+  [placeholder]="placeholder"
+  [ngClass]="textareaClass"
+></textarea>
