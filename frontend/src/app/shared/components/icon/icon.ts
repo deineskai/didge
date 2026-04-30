@@ -14,7 +14,8 @@ export type IconName =
   | 'logout'
   | 'chevron-left'
   | 'share'
-  | 'more';
+  | 'more'
+  | 'trash';
 
 const ICONS: Record<IconName, string> = {
   discover: `<path d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" /><path fill-rule="evenodd" d="M21.707 21.707a1 1 0 0 1-1.414 0l-3.5-3.5a1 1 0 0 1 1.414-1.414l3.5 3.5a1 1 0 0 1 0 1.414Z" clip-rule="evenodd" />`,
@@ -29,6 +30,7 @@ const ICONS: Record<IconName, string> = {
   'chevron-left': `<path d="m14 8-4 4 4 4"/>`,
   share: `<path d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8" />`,
   more: `<path stroke-linecap="round" d="M6 12h.01m6 0h.01m5.99 0h.01" />`,
+  trash: `<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />`,
 };
 
 @Component({

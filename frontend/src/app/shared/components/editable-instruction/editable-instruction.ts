@@ -2,10 +2,12 @@ import { Component, forwardRef, Input, Output, EventEmitter } from '@angular/cor
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { FormsModule } from '@angular/forms';
 import { EditableText } from '../editable-text/editable-text';
+import { NgClass } from '@angular/common';
+import { Icon } from '../icon/icon';
 
 @Component({
   selector: 'app-editable-instruction',
-  imports: [FormsModule, TextFieldModule, EditableText],
+  imports: [FormsModule, TextFieldModule, EditableText, NgClass, Icon],
   templateUrl: './editable-instruction.html',
   styleUrl: './editable-instruction.css',
 })
