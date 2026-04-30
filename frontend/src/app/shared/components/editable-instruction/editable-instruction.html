@@ -1,0 +1,36 @@
+<div class="relative flex">
+  <!-- Step Number -->
+  <div class="relative h-full">
+    <span
+      class="inline-flex mr-4 items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-gray-800 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-white"
+    >
+      {{ stepNumber }}
+      <span class="sr-only">Icon description</span>
+    </span>
+  </div>
+  <!-- Summary + Details -->
+  <div class="w-full lg:w-150 grid gap-2">
+    @if (editMode) {
+      <app-editable-text
+        [(ngModel)]="summary"
+        textareaClass="!text-xl tracking-tight leading-tight font-bold"
+      ></app-editable-text>
+
+      <app-editable-text
+        [(ngModel)]="details"
+        [maxlength]="250"
+        textareaClass="leading-normal tracking-normal font-normal !text-gray-700 dark:!text-gray-400"
+      ></app-editable-text>
+    } @else {
+      <h5
+        class="text-xl w-full font-bold tracking-tight leading-tight text-gray-900 dark:text-white"
+      >
+        {{ summary }}
+      </h5>
+
+      <p class="font-normal w-full leading-normal text-gray-700 dark:text-gray-400">
+        {{ details }}
+      </p>
+    }
+  </div>
+</div>
