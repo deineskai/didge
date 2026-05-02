@@ -1,0 +1,81 @@
+<!-- Add friend modal -->
+@if (isOpen) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/40" (click)="isOpen = false"></div>
+    <!-- Dialog -->
+    <div class="relative p-4 w-full max-w-md max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-800">
+        <!-- Modal header -->
+        <div
+          class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200"
+        >
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Edit Ingredient</h3>
+
+          <button
+            type="button"
+            (click)="close()"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          >
+            <svg
+              class="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <form class="p-4 md:p-5 z-100">
+          <div class="grid gap-4 grid-cols-2">
+            <!-- Ingredient dropdown -->
+            <div class="col-span-2">
+              <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Ingredient</label
+              >
+              <app-searchable-dropdown [options]="ingredients"></app-searchable-dropdown>
+            </div>
+            <!-- Amount spinner -->
+            <div class="col-span-2 sm:col-span-1">
+              <label
+                for="price"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Amount</label
+              >
+              <app-spinner [step]="0.1"></app-spinner>
+            </div>
+            <!-- Unit dropdown -->
+            <div class="col-span-2 sm:col-span-1 mb-8">
+              <label
+                for="category"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Unit</label
+              >
+              <app-searchable-dropdown [options]="units"></app-searchable-dropdown>
+            </div>
+            <div></div>
+            <!-- Save Button -->
+            <button
+              class="block text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
+              type="button"
+              (click)="save()"
+            >
+              Confirm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
