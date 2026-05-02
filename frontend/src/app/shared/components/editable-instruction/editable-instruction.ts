@@ -16,6 +16,7 @@ export class EditableInstruction {
   @Input() summary!: string;
   @Input() details!: string;
   @Input() editMode = false;
+  @Input() isAddButton = false;
 
   @Output() summaryChange = new EventEmitter<string>();
   @Output() detailsChange = new EventEmitter<string>();

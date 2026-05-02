@@ -1,52 +1,73 @@
 <div
-  class="relative flex justify-between"
-  [ngClass]="editMode ? 'border-2 border-dashed border-gray-600 rounded-lg p-6' : ''"
+  class="relative flex justify-between border-0 border-dashed border-gray-300 dark:border-gray-500 rounded-lg transition-all hover:border-gray-600 dark:hover:border-white text-gray-300 dark:text-gray-500 hover:text-gray-600 dark:hover:text-white"
+  [class.justify-center]="isAddButton"
+  [ngClass]="editMode || isAddButton ? 'border-2   p-6  ' : ''"
 >
-  <div class="relative flex">
-    <!-- Step Number -->
-    <div class="relative h-full">
-      <span
-        class="inline-flex mr-4 items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-gray-800 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-white"
-      >
-        {{ stepNumber }}
-        <span class="sr-only">Icon description</span>
-      </span>
-    </div>
-    <!-- Summary + Details -->
-    <div class="w-full lg:w-150 grid gap-2">
-      @if (editMode) {
-        <app-editable-text
-          [(ngModel)]="summary"
-          textareaClass="!text-xl tracking-tight leading-tight font-bold"
-        ></app-editable-text>
-
-        <app-editable-text
-          [(ngModel)]="details"
-          [maxlength]="250"
-          textareaClass="leading-normal tracking-normal font-normal !text-gray-700 dark:!text-gray-400"
-        ></app-editable-text>
-      } @else {
-        <h5
-          class="text-xl w-full font-bold tracking-tight leading-tight text-gray-900 dark:text-white"
-        >
-          {{ summary }}
-        </h5>
-
-        <p class="font-normal w-full leading-normal text-gray-700 dark:text-gray-400">
-          {{ details }}
-        </p>
-      }
-    </div>
-  </div>
-  <!-- Delete Button -->
-  <div class="relative w-fit h-fit items-center" [class.hidden]="!editMode">
-    <button
-      type="button"
-      class="text-red-700 ml-4 border border-red-700 hover:bg-red-700 hover:text-white ring-0 focus:outline-none focus:ring-0 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-500"
+  @if (isAddButton) {
+    <svg
+      class="w-6 h-6"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
     >
-      <app-icon name="trash" fill="none" class="w-5 h-5"></app-icon>
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M5 12h14m-7 7V5"
+      />
+    </svg>
+  } @else {
+    <div class="relative flex">
+      <!-- Step Number -->
+      <div class="relative h-full">
+        <span
+          class="inline-flex mr-4 items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-gray-800 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-white"
+        >
+          {{ stepNumber }}
+          <span class="sr-only">Icon description</span>
+        </span>
+      </div>
+      <!-- Summary + Details -->
+      <div class="w-full lg:w-150 grid gap-2">
+        @if (editMode) {
+          <app-editable-text
+            [(ngModel)]="summary"
+            textareaClass="!text-xl tracking-tight leading-tight font-bold"
+          ></app-editable-text>
 
-      <span class="sr-only">Icon description</span>
-    </button>
-  </div>
+          <app-editable-text
+            [(ngModel)]="details"
+            [maxlength]="250"
+            textareaClass="leading-normal tracking-normal font-normal !text-gray-700 dark:!text-gray-400"
+          ></app-editable-text>
+        } @else {
+          <h5
+            class="text-xl w-full font-bold tracking-tight leading-tight text-gray-900 dark:text-white"
+          >
+            {{ summary }}
+          </h5>
+
+          <p class="font-normal w-full leading-normal text-gray-700 dark:text-gray-400">
+            {{ details }}
+          </p>
+        }
+      </div>
+    </div>
+    <!-- Delete Button -->
+    <div class="relative w-fit h-fit items-center" [class.hidden]="!editMode">
+      <button
+        type="button"
+        class="text-red-700 ml-4 border border-red-700 hover:bg-red-700 hover:text-white ring-0 focus:outline-none focus:ring-0 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-500 transition-all"
+      >
+        <app-icon name="trash" fill="none" class="w-5 h-5"></app-icon>
+
+        <span class="sr-only">Icon description</span>
+      </button>
+    </div>
+  }
 </div>
