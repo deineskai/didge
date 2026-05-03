@@ -28,7 +28,7 @@
         <span
           class="inline-flex mr-4 items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-gray-800 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-white"
         >
-          {{ stepNumber }}
+          {{ instruction.step_number }}
           <span class="sr-only">Icon description</span>
         </span>
       </div>
@@ -36,12 +36,14 @@
       <div class="w-full lg:w-150 grid gap-2">
         @if (editMode) {
           <app-editable-text
-            [(ngModel)]="summary"
+            [(ngModel)]="instruction.summary"
+            placeholder="Add title..."
             textareaClass="!text-xl tracking-tight leading-tight font-bold"
           ></app-editable-text>
 
           <app-editable-text
-            [(ngModel)]="details"
+            [(ngModel)]="instruction.details"
+            placeholder="Add details..."
             [maxlength]="250"
             textareaClass="leading-normal tracking-normal font-normal !text-gray-700 dark:!text-gray-400"
           ></app-editable-text>
@@ -49,11 +51,11 @@
           <h5
             class="text-xl w-full font-bold tracking-tight leading-tight text-gray-900 dark:text-white"
           >
-            {{ summary }}
+            {{ instruction.summary }}
           </h5>
 
           <p class="font-normal w-full leading-normal text-gray-700 dark:text-gray-400">
-            {{ details }}
+            {{ instruction.details }}
           </p>
         }
       </div>
@@ -62,6 +64,7 @@
     <div class="relative w-fit h-fit items-center" [class.hidden]="!editMode">
       <button
         type="button"
+        (click)="deleteInstruction()"
         class="text-red-700 ml-4 border border-red-700 hover:bg-red-700 hover:text-white ring-0 focus:outline-none focus:ring-0 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-500 transition-all"
       >
         <app-icon name="trash" fill="none" class="w-5 h-5"></app-icon>

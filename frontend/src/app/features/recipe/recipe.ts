@@ -90,4 +90,12 @@ export class Recipe implements OnInit {
     'Orange',
   ];
   testUnits: string[] = ['g', 'kg', 'ml', 'l', 'tsp', 'tbsp', 'to taste', 'pc', 'srv'];
+
+  createInstruction() {
+    this.recipe.instructions.push({ step_number: 0, summary: '', Details: '' });
+  }
+
+  deleteInstruction(instruction: any) {
+    this.recipe.instructions = this.recipe.instructions.filter((i: any) => i !== instruction);
+  }
 }

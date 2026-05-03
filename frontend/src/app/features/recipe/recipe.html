@@ -100,16 +100,16 @@
     <div class="grid grid-cols-1 gap-12">
       @for (instruction of recipe.instructions; track instruction.step_number) {
         <app-editable-instruction
-          [stepNumber]="instruction.step_number"
-          [(summary)]="instruction.summary"
-          [(details)]="instruction.details"
+          [instruction]="instruction"
           [editMode]="editMode"
+          (delete)="deleteInstruction(instruction)"
         >
         </app-editable-instruction>
       }
       <app-editable-instruction
         [isAddButton]="true"
         [class.hidden]="!editMode"
+        (click)="createInstruction()"
       ></app-editable-instruction>
     </div>
 

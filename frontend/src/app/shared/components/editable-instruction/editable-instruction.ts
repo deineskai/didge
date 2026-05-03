@@ -12,12 +12,15 @@ import { Icon } from '../icon/icon';
   styleUrl: './editable-instruction.css',
 })
 export class EditableInstruction {
-  @Input() stepNumber!: number;
-  @Input() summary!: string;
-  @Input() details!: string;
+  @Input() instruction: any;
   @Input() editMode = false;
   @Input() isAddButton = false;
 
   @Output() summaryChange = new EventEmitter<string>();
   @Output() detailsChange = new EventEmitter<string>();
+  @Output() delete = new EventEmitter();
+
+  deleteInstruction() {
+    this.delete.emit();
+  }
 }
