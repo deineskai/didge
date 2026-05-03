@@ -14,23 +14,23 @@
   </div>
   <!-- Ingredients -->
   <h5 class="pt-16 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Ingredients</h5>
-  <div class="flex flex-wrap items-center justify-between gap-y-2 pb-2">
+  <div class="flex flex-wrap items-center justify-between gap-y-4 pb-2">
     <h3 class="whitespace-nowrap mr-4">
       for <span class="font-bold">{{ quantity }}</span> {{ recipe.unit.abbreviation }}
     </h3>
 
-    <div class="flex flex-wrap rounded-md shadow-xs gap-2" role="group">
+    <div class="flex grow sm:grow-0 w-full sm:w-auto rounded-md shadow-xs gap-2" role="group">
       <app-spinner
         [(value)]="quantity"
         [min]="1"
         [step]="1"
         [adaptive]="true"
-        class="max-w-40 xs:w-full"
+        class="flex-1 max-w-none sm:max-w-40"
       ></app-spinner>
 
       <app-searchable-dropdown
         [options]="testUnits"
-        class="w-40 xs:w-full"
+        class="flex-1 min-w-30 max-w-none sm:max-w-40"
         [class.hidden]="!editMode"
       ></app-searchable-dropdown>
     </div>
