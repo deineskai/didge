@@ -98,9 +98,10 @@
     </h5>
 
     <div class="grid grid-cols-1 gap-12">
-      @for (instruction of recipe.instructions; track instruction.step_number) {
+      @for (instruction of recipe.instructions; track $index) {
         <app-editable-instruction
           [instruction]="instruction"
+          [step_number]="$index + 1"
           [editMode]="editMode"
           (delete)="deleteInstruction(instruction)"
         >
