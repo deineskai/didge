@@ -31,7 +31,7 @@ class ItemCompositionCreate(BaseModel):
 
 class ItemCompositionRead(BaseModel):
     id: int
-    contained_item: CulinaryItemRead  # TODO: ensure recursion limit
+    contained_item: IngredientRead  # TODO: ensure recursion limit
     unit: CulinaryUnitRead
     quantity: float
 
