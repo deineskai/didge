@@ -9,8 +9,8 @@ import { Spinner } from '../../../shared/components/spinner/spinner';
   styleUrl: './edit-ingredient-modal.css',
 })
 export class EditIngredientModal {
-  @Input() ingredients: string[] = [];
-  @Input() units: string[] = [];
+  @Input({ required: true }) ingredients: string[] = [];
+  @Input({ required: true }) units: any[] = [];
   @Input() currentIngredient: any;
 
   @Input() isOpen: boolean = true;

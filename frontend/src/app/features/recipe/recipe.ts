@@ -31,7 +31,8 @@ import { InputLabel } from '../../shared/components/input-label/input-label';
 export class Recipe implements OnInit {
   recipe: any = {};
   diets: string[] = [];
-  quantity: number = 1;
+  quantity: number = 0;
+  units: any = {};
   editMode: boolean = false;
   editIngredient: boolean = false;
   currentIngredient: any | null = { name: 'Salt' };
@@ -49,6 +50,7 @@ export class Recipe implements OnInit {
         this.loadRecipe(id);
       }
     });
+    this.loadUnits();
   }
 
   loadRecipe(id: number) {
@@ -57,6 +59,15 @@ export class Recipe implements OnInit {
         this.recipe = data;
         this.quantity = this.recipe.quantity;
         this.diets = this.culinaryService.getDietsAsStrings(this.recipe);
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  loadUnits() {
+    this.culinaryService.getUnits().subscribe({
+      next: (data) => {
+        this.units = data;
         this.cdr.detectChanges();
       },
     });
@@ -93,19 +104,6 @@ export class Recipe implements OnInit {
     'Orange',
     'Salt',
   ];
-  testUnits: any[] = [
-    { id: 1, name: 'g' },
-    { id: 2, name: 'kg' },
-    { id: 3, name: 'l' },
-    { id: 4, name: 'ml' },
-    { id: 5, name: 'tsp' },
-    { id: 6, name: 'tbsp' },
-    { id: 7, name: 'to taste' },
-    { id: 8, name: 'pc' },
-    { id: 9, name: 'srv' },
-  ];
-
-  selectedUnit: number = 3;
 
   addIngredient() {
     const ingredient = {

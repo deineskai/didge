@@ -66,8 +66,9 @@
                 >Unit</label
               >
               <app-searchable-dropdown
-                [selectedValue]="currentIngredient.unit.abbreviation"
                 [options]="units"
+                bindLabel="abbreviation"
+                [(selectedValue)]="currentIngredient.unit"
               ></app-searchable-dropdown>
             </div>
             <!-- Delete Button -->

@@ -9,10 +9,20 @@ import { CommonModule } from '@angular/common';
   templateUrl: './searchable-dropdown.html',
 })
 export class SearchableDropdown<T = any> implements OnInit {
-  @Input() options: T[] = [];
+  private _options: T[] = [];
+  @Input() set options(value: T[]) {
+    this._options = Array.isArray(value) ? value : [];
+    this.filteredOptions = [...this._options];
+  }
+  get options(): T[] {
+    return this._options;
+  }
+
   @Input() bindLabel: string = ''; // Propertry to be shown
-  @Input() bindValue: string = ''; // Property to be emitted - if this is empty the whole object is returned
+  @Input() bindValue: string = ''; // Property to be emitted / compared - if this is empty the whole object is returned / compared
+
   @Input() selectedValue: any = null;
+
   @Output() selectedValueChange = new EventEmitter<string>();
 
   filteredOptions: T[] = [];
@@ -33,7 +43,6 @@ export class SearchableDropdown<T = any> implements OnInit {
     });
   }
 
-  // Hilfsmethode, um den Text für das Template zu extrahieren
   getDisplayLabel(option: T): string {
     if (!option) return '';
     if (this.bindLabel && typeof option === 'object') {
@@ -42,7 +51,6 @@ export class SearchableDropdown<T = any> implements OnInit {
     return String(option);
   }
 
-  // Hilfsmethode für den Rückgabewert (ID oder Objekt)
   getInternalValue(option: T): any {
     if (this.bindValue && typeof option === 'object') {
       return this.getDeepValue(option, this.bindValue);
@@ -50,16 +58,26 @@ export class SearchableDropdown<T = any> implements OnInit {
     return option;
   }
 
-  // Findet das passende Label für den aktuell selektierten Wert
   getSelectedLabel(): string {
-    const selected = this.options.find((opt) => this.getInternalValue(opt) === this.selectedValue);
-    return selected ? this.getDisplayLabel(selected) : 'Bitte wählen...';
+    const selected = this.options.find((opt) =>
+      this.deepEqual(this.getInternalValue(opt), this.selectedValue),
+    );
+    return selected ? this.getDisplayLabel(selected) : 'Select...';
+  }
+
+  private deepEqual(obj1: any, obj2: any): boolean {
+    if (obj1 === obj2) return true;
+    if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || obj1 === null || obj2 === null) {
+      return false;
+    }
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
+    if (keys1.length !== keys2.length) return false;
+    return keys1.every((key) => this.deepEqual(obj1[key], obj2[key]));
   }
 
   private getDeepValue(obj: any, path: string): any {
     if (!obj || !path) return obj;
-
-    // Teilt den Pfad bei jedem Punkt und wandert durch das Objekt
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   }
 
@@ -67,7 +85,6 @@ export class SearchableDropdown<T = any> implements OnInit {
     const valueToEmit = this.getInternalValue(option);
     this.selectedValue = valueToEmit;
     this.selectedValueChange.emit(valueToEmit);
-    console.log(this.selectedValue);
 
     this.isOpen = false;
     this.searchControl.setValue('', { emitEvent: false });
