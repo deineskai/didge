@@ -25,6 +25,10 @@ export class CulinaryService {
     return this.http.get(`${this.apiUrl}/culinary-units`);
   }
 
+  getIngredients(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/culinary-items/ingredients`);
+  }
+
   getDietsAsStrings(recipe: any): string[] {
     const diets = recipe.diets;
 

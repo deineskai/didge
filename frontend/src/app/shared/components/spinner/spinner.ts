@@ -1,8 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Icon } from '../icon/icon';
 
 @Component({
   selector: 'app-spinner',
-  imports: [],
+  imports: [Icon],
   templateUrl: './spinner.html',
   styleUrl: './spinner.css',
 })

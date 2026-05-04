@@ -33,15 +33,25 @@ export class Recipe implements OnInit {
   diets: string[] = [];
   quantity: number = 0;
   units: any = {};
+  availableIngredients: any[] = [];
   editMode: boolean = false;
   editIngredient: boolean = false;
   currentIngredient: any | null = { name: 'Salt' };
+  ingredientDraft: any = {};
   private cdr = inject(ChangeDetectorRef);
 
   constructor(
     private route: ActivatedRoute,
     private culinaryService: CulinaryService,
   ) {}
+
+  sanitizeIngredients() {
+    this.recipe.compositions = this.recipe.compositions.filter((c: any) => {
+      const isValid = c.contained_item?.id != null && c.unit?.id != null && c.quantity != null;
+      console.log('Item:', c.contained_item?.name, 'Valid:', isValid);
+      return isValid;
+    });
+  }
 
   ngOnInit() {
     this.route.queryParamMap.subscribe((params) => {
@@ -51,6 +61,7 @@ export class Recipe implements OnInit {
       }
     });
     this.loadUnits();
+    this.loadAvailableIngredients();
   }
 
   loadRecipe(id: number) {
@@ -62,6 +73,16 @@ export class Recipe implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  loadAvailableIngredients() {
+    this.culinaryService.getIngredients().subscribe({
+      next: (data) => {
+        this.availableIngredients = data;
+        this.cdr.detectChanges();
+      },
+    });
+    console.log(this.availableIngredients);
   }
 
   loadUnits() {
@@ -82,57 +103,44 @@ export class Recipe implements OnInit {
   }
 
   toggleEditMode() {
+    if (this.editMode) {
+      this.recipe.quantity = this.quantity;
+    }
     this.editMode = !this.editMode;
   }
 
   openEditIngredientModal(ingredient: any) {
     this.currentIngredient = ingredient;
-    console.log('Current ingredient: ', ingredient);
+    this.ingredientDraft = structuredClone(this.currentIngredient);
     this.editIngredient = true;
+    console.log({
+      currentIndgredient: this.ingredientDraft,
+      ingredients: this.availableIngredients,
+    });
   }
 
-  testIngredients = [
-    'Apple',
-    'Banana',
-    'Cherry',
-    'Date',
-    'Elderberry',
-    'Fig',
-    'Grape',
-    'Lemon',
-    'Mango',
-    'Orange',
-    'Salt',
-  ];
+  updateIngredient() {
+    const index = this.recipe.compositions.indexOf(this.currentIngredient);
+
+    if (index !== -1) {
+      this.recipe.compositions[index] = structuredClone(this.ingredientDraft);
+    }
+    this.editIngredient = false;
+  }
 
   addIngredient() {
     const ingredient = {
-      id: 1,
-      contained_item: {
-        id: 1,
-        name: 'Salt',
-        unit: {
-          id: 1,
-          name: 'gram',
-          abbreviation: 'g',
-          conversion_factor: 1,
-          base_unit_id: null,
-        },
-      },
-      unit: {
-        id: 1,
-        name: 'gram',
-        abbreviation: 'g',
-        conversion_factor: 1,
-        base_unit_id: null,
-      },
-      quantity: 500.0,
+      contained_item: {},
+      unit: {},
     };
     this.recipe.compositions.push(ingredient);
+    this.openEditIngredientModal(this.recipe.compositions.at(-1));
   }
 
-  removeIngredient(ingredient: any) {
-    this.recipe.ingredients = this.recipe.ingredients.filter((i: any) => i !== ingredient);
+  removeIngredient() {
+    this.recipe.compositions = this.recipe.compositions.filter(
+      (c: any) => c !== this.currentIngredient,
+    );
   }
 
   createInstruction() {

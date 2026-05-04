@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Icon } from '../icon/icon';
 
 @Component({
   selector: 'app-searchable-dropdown',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Icon],
   templateUrl: './searchable-dropdown.html',
 })
 export class SearchableDropdown<T = any> implements OnInit {

@@ -20,95 +20,100 @@
     Edit
   </button>
   <!-- Ingredients -->
-  <h5 class="pt-16 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Ingredients</h5>
-  <div class="flex flex-wrap items-center justify-between gap-y-4 pb-2">
-    <h3 class="whitespace-nowrap mr-4">
-      for <span class="font-bold">{{ quantity }}</span> {{ recipe.unit?.abbreviation }}
-    </h3>
-
-    <div class="flex grow sm:grow-0 w-full sm:w-auto rounded-md shadow-xs gap-2" role="group">
-      <app-spinner
-        [(value)]="quantity"
-        [min]="1"
-        [step]="1"
-        [adaptive]="true"
-        class="flex-1 max-w-none sm:max-w-40"
-      ></app-spinner>
-
-      <app-searchable-dropdown
-        [options]="units"
-        bindLabel="abbreviation"
-        [(selectedValue)]="recipe.unit"
-        class="flex-1 min-w-30 max-w-none sm:max-w-40"
-        [class.hidden]="!editMode"
-      ></app-searchable-dropdown>
+  <div>
+    <h5 class="pt-16 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+      Ingredients
+    </h5>
+    <!-- Ingredients Toolbar -->
+    <div class="flex flex-wrap items-center justify-between gap-y-4 pb-2">
+      <h3 class="whitespace-nowrap mr-4">
+        for <span class="font-bold">{{ quantity }}</span> {{ recipe.unit?.abbreviation }}
+      </h3>
+      <div class="flex grow sm:grow-0 w-full sm:w-auto rounded-md gap-2" role="group">
+        <app-spinner
+          [(value)]="quantity"
+          [min]="1"
+          [step]="1"
+          [adaptive]="true"
+          class="flex-1 max-w-none sm:max-w-40"
+        ></app-spinner>
+        <app-searchable-dropdown
+          [options]="units"
+          bindLabel="abbreviation"
+          [(selectedValue)]="recipe.unit"
+          class="flex-1 min-w-30 max-w-none sm:max-w-40"
+          [class.hidden]="!editMode"
+        ></app-searchable-dropdown>
+      </div>
     </div>
-  </div>
-
-  <div class="relative overflow-x-auto shadow-md rounded-lg transition-all">
-    <table
-      class="w-full table-fixed max-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-    >
-      <thead class="text-xs uppercase bg-blue-50 dark:bg-blue-700 text-gray-900 dark:text-white">
-        <tr>
-          <th scope="col" class="px-6 py-3">Amount</th>
-          <th scope="col" class="px-6 py-3">Ingredient</th>
-          @if (editMode) {
-            <th scope="col"></th>
-          }
-        </tr>
-      </thead>
-      <tbody>
-        @for (ingredient of recipe.compositions; track ingredient.id; let isLast = $last) {
-          <tr
-            class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all"
-            [class.border-b]="!isLast"
-            [class.dark:border-gray-700]="!isLast"
-            [class.border-gray-200]="!isLast"
-          >
-            <td class="px-6 py-4">
-              {{
-                editMode ? ingredient.quantity : ingredient.quantity * (quantity / recipe.quantity)
-              }}
-              {{ ingredient.unit.abbreviation }}
-            </td>
-            <th
-              scope="row"
-              class="px-6 py-4 font-medium text-gray-900 dark:text-white align-middle break-words"
-            >
-              {{ ingredient.contained_item.name }}
-            </th>
+    <!-- Ingredient Table -->
+    <div class="relative overflow-x-auto shadow-md rounded-lg transition-all">
+      <table
+        class="w-full table-fixed max-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+      >
+        <thead class="text-xs uppercase bg-blue-50 dark:bg-blue-700 text-gray-900 dark:text-white">
+          <tr>
+            <th scope="col" class="px-6 py-3">Amount</th>
+            <th scope="col" class="px-6 py-3">Ingredient</th>
             @if (editMode) {
-              <td class="px-6 py-4">
-                <div class="w-full flex justify-end">
-                  <!-- Edit Button -->
-                  <div class="relative w-fit h-fit items-center" [class.hidden]="!editMode">
-                    <button
-                      type="button"
-                      (click)="openEditIngredientModal(ingredient)"
-                      class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white ring-0 focus:outline-none focus:ring-0 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 transition-all"
-                    >
-                      <app-icon name="edit" fill="none" class="w-5 h-5"></app-icon>
-
-                      <span class="sr-only">Icon description</span>
-                    </button>
-                    <!-- Delete Button -->
-                  </div>
-                </div>
-              </td>
+              <th scope="col"></th>
             }
           </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-  <div class="pt-4"></div>
-  <app-editable-instruction
-    [isAddButton]="true"
-    [class.hidden]="!editMode"
-    (click)="addIngredient()"
-  ></app-editable-instruction>
+        </thead>
+        <tbody>
+          @for (ingredient of recipe.compositions; track ingredient.id; let isLast = $last) {
+            <tr
+              class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all"
+              [class.border-b]="!isLast"
+              [class.dark:border-gray-700]="!isLast"
+              [class.border-gray-200]="!isLast"
+            >
+              <td class="px-6 py-4">
+                {{
+                  editMode
+                    ? ingredient.quantity
+                    : ingredient.quantity * (quantity / recipe.quantity)
+                }}
+                {{ ingredient.unit.abbreviation }}
+              </td>
+              <th
+                scope="row"
+                class="px-6 py-4 font-medium text-gray-900 dark:text-white align-middle break-words"
+              >
+                {{ ingredient.contained_item.name }}
+              </th>
+              <!-- Edit Mode Buttons -->
+              @if (editMode) {
+                <td class="px-6 py-4">
+                  <div class="w-full flex justify-end">
+                    <!-- Edit Button -->
+                    <div class="relative w-fit h-fit items-center" [class.hidden]="!editMode">
+                      <button
+                        type="button"
+                        (click)="openEditIngredientModal(ingredient)"
+                        class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white ring-0 focus:outline-none focus:ring-0 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 transition-all"
+                      >
+                        <app-icon name="edit" fill="none" class="w-5 h-5"></app-icon>
 
+                        <span class="sr-only">Icon description</span>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="pt-4"></div>
+    <!-- Add Ingredient Button -->
+    <app-editable-instruction
+      [isAddButton]="true"
+      [class.hidden]="!editMode"
+      (click)="addIngredient()"
+    ></app-editable-instruction>
+  </div>
   <!-- Instructions -->
   <div class="min-h-[95dvh]">
     <h5 class="mb-2 pt-16 pb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -150,11 +155,13 @@
 
     <!-- Edit Ingredient modal -->
     <app-edit-ingredient-modal
-      [ingredients]="testIngredients"
-      [currentIngredient]="currentIngredient"
+      [ingredients]="availableIngredients"
+      [currentIngredient]="ingredientDraft"
       [units]="units"
       [(isOpen)]="editIngredient"
-      (remove)="removeIngredient($event)"
+      (remove)="removeIngredient()"
+      (confirm)="updateIngredient()"
+      (cancel)="sanitizeIngredients()"
     ></app-edit-ingredient-modal>
   </div>
 </app-content-page-layout>

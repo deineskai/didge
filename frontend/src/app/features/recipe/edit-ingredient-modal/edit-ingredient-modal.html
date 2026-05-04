@@ -15,25 +15,11 @@
 
           <button
             type="button"
-            (click)="close()"
+            (click)="discard()"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
           >
-            <svg
-              class="w-3 h-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 14"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-            <span class="sr-only">Close modal</span>
+            <app-icon name="close" class="w-3 h-3"></app-icon>
+            <span class="sr-only">Discard Changes</span>
           </button>
         </div>
         <!-- Modal body -->
@@ -41,30 +27,21 @@
           <div class="grid gap-4 grid-cols-2">
             <!-- Ingredient dropdown -->
             <div class="col-span-2">
-              <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Ingredient</label
-              >
+              <app-input-label name="Ingredient"></app-input-label>
               <app-searchable-dropdown
                 [options]="ingredients"
-                [selectedValue]="currentIngredient.contained_item.name"
+                bindLabel="name"
+                [(selectedValue)]="currentIngredient.contained_item"
               ></app-searchable-dropdown>
             </div>
             <!-- Amount spinner -->
             <div class="col-span-2 sm:col-span-1">
-              <label
-                for="price"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Amount</label
-              >
+              <app-input-label name="Amount"></app-input-label>
               <app-spinner [(value)]="currentIngredient.quantity" [step]="0.1"></app-spinner>
             </div>
             <!-- Unit dropdown -->
             <div class="col-span-2 sm:col-span-1 mb-8">
-              <label
-                for="category"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Unit</label
-              >
+              <app-input-label name="Unit"></app-input-label>
               <app-searchable-dropdown
                 [options]="units"
                 bindLabel="abbreviation"
@@ -79,11 +56,12 @@
             >
               Delete
             </button>
-            <!-- Save Button -->
+            <!-- Confirm Button -->
             <button
-              class="block text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
+              class="block text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               type="button"
-              (click)="save()"
+              (click)="confirmChanges()"
+              [disabled]="!isValidIngredient()"
             >
               Confirm
             </button>
