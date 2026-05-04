@@ -93,7 +93,19 @@ export class Recipe implements OnInit {
     'Orange',
     'Salt',
   ];
-  testUnits: string[] = ['g', 'kg', 'ml', 'l', 'tsp', 'tbsp', 'to taste', 'pc', 'srv'];
+  testUnits: any[] = [
+    { id: 1, name: 'g' },
+    { id: 2, name: 'kg' },
+    { id: 3, name: 'l' },
+    { id: 4, name: 'ml' },
+    { id: 5, name: 'tsp' },
+    { id: 6, name: 'tbsp' },
+    { id: 7, name: 'to taste' },
+    { id: 8, name: 'pc' },
+    { id: 9, name: 'srv' },
+  ];
+
+  selectedUnit: number = 3;
 
   addIngredient() {
     const ingredient = {

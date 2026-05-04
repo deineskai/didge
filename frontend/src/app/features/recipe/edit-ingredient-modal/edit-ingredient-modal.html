@@ -44,7 +44,10 @@
               <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Ingredient</label
               >
-              <app-searchable-dropdown [options]="ingredients"></app-searchable-dropdown>
+              <app-searchable-dropdown
+                [options]="ingredients"
+                [selectedValue]="currentIngredient.contained_item.name"
+              ></app-searchable-dropdown>
             </div>
             <!-- Amount spinner -->
             <div class="col-span-2 sm:col-span-1">
@@ -62,7 +65,10 @@
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Unit</label
               >
-              <app-searchable-dropdown [options]="units"></app-searchable-dropdown>
+              <app-searchable-dropdown
+                [selectedValue]="currentIngredient.unit.abbreviation"
+                [options]="units"
+              ></app-searchable-dropdown>
             </div>
             <!-- Delete Button -->
             <button

@@ -37,6 +37,9 @@
 
       <app-searchable-dropdown
         [options]="testUnits"
+        bindLabel="name"
+        bindValue="id"
+        [(selectedValue)]="selectedUnit"
         class="flex-1 min-w-30 max-w-none sm:max-w-40"
         [class.hidden]="!editMode"
       ></app-searchable-dropdown>
