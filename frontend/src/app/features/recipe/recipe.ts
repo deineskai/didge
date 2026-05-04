@@ -34,8 +34,8 @@ export class Recipe implements OnInit {
   quantity: number = 0;
   units: any = {};
   availableIngredients: any[] = [];
-  editMode: boolean = false;
-  editIngredient: boolean = false;
+  isEditing: boolean = false;
+  isEditingIngredient: boolean = false;
   currentIngredient: any | null = { name: 'Salt' };
   ingredientDraft: any = {};
   private cdr = inject(ChangeDetectorRef);
@@ -103,16 +103,16 @@ export class Recipe implements OnInit {
   }
 
   toggleEditMode() {
-    if (this.editMode) {
+    if (this.isEditing) {
       this.recipe.quantity = this.quantity;
     }
-    this.editMode = !this.editMode;
+    this.isEditing = !this.isEditing;
   }
 
   openEditIngredientModal(ingredient: any) {
     this.currentIngredient = ingredient;
     this.ingredientDraft = structuredClone(this.currentIngredient);
-    this.editIngredient = true;
+    this.isEditingIngredient = true;
     console.log({
       currentIndgredient: this.ingredientDraft,
       ingredients: this.availableIngredients,
@@ -125,7 +125,7 @@ export class Recipe implements OnInit {
     if (index !== -1) {
       this.recipe.compositions[index] = structuredClone(this.ingredientDraft);
     }
-    this.editIngredient = false;
+    this.isEditingIngredient = false;
   }
 
   addIngredient() {
@@ -149,5 +149,11 @@ export class Recipe implements OnInit {
 
   deleteInstruction(instruction: any) {
     this.recipe.instructions = this.recipe.instructions.filter((i: any) => i !== instruction);
+  }
+
+  deleteTag(tag_id: number) {
+    this.recipe.tags = this.recipe.tags.filter((t: any) => {
+      return t.id !== tag_id;
+    });
   }
 }

@@ -5,11 +5,16 @@
 >
   <!-- Tags -->
   <div class="flex flex-wrap w-full items-center gap-2 pb-8">
-    @for (diet of diets; track diet) {
-      <app-badge [text]="diet" />
+    @for (diet of diets; track $index) {
+      <app-badge [text]="diet" [id]="$index" />
     }
-    @for (tag of recipe.tags; track tag) {
-      <app-badge [text]="tag.name" />
+    @for (tag of recipe.tags; track tag.id) {
+      <app-badge
+        [text]="tag.name"
+        [id]="tag.id"
+        [dismissible]="isEditing"
+        (dismiss)="deleteTag($event)"
+      />
     }
   </div>
   <button
@@ -42,7 +47,7 @@
           bindLabel="abbreviation"
           [(selectedValue)]="recipe.unit"
           class="flex-1 min-w-30 max-w-none sm:max-w-40"
-          [class.hidden]="!editMode"
+          [class.hidden]="!isEditing"
         ></app-searchable-dropdown>
       </div>
     </div>
@@ -55,7 +60,7 @@
           <tr>
             <th scope="col" class="px-6 py-3">Amount</th>
             <th scope="col" class="px-6 py-3">Ingredient</th>
-            @if (editMode) {
+            @if (isEditing) {
               <th scope="col"></th>
             }
           </tr>
@@ -70,7 +75,7 @@
             >
               <td class="px-6 py-4">
                 {{
-                  editMode
+                  isEditing
                     ? ingredient.quantity
                     : ingredient.quantity * (quantity / recipe.quantity)
                 }}
@@ -83,11 +88,11 @@
                 {{ ingredient.contained_item.name }}
               </th>
               <!-- Edit Mode Buttons -->
-              @if (editMode) {
+              @if (isEditing) {
                 <td class="px-6 py-4">
                   <div class="w-full flex justify-end">
                     <!-- Edit Button -->
-                    <div class="relative w-fit h-fit items-center" [class.hidden]="!editMode">
+                    <div class="relative w-fit h-fit items-center" [class.hidden]="!isEditing">
                       <button
                         type="button"
                         (click)="openEditIngredientModal(ingredient)"
@@ -110,7 +115,7 @@
     <!-- Add Ingredient Button -->
     <app-editable-instruction
       [isAddButton]="true"
-      [class.hidden]="!editMode"
+      [class.hidden]="!isEditing"
       (click)="addIngredient()"
     ></app-editable-instruction>
   </div>
@@ -124,14 +129,14 @@
         <app-editable-instruction
           [instruction]="instruction"
           [step_number]="$index + 1"
-          [editMode]="editMode"
+          [editMode]="isEditing"
           (delete)="deleteInstruction(instruction)"
         >
         </app-editable-instruction>
       }
       <app-editable-instruction
         [isAddButton]="true"
-        [class.hidden]="!editMode || recipe.instructions.length > 23"
+        [class.hidden]="!isEditing || recipe.instructions.length > 23"
         (click)="createInstruction()"
       ></app-editable-instruction>
     </div>
@@ -140,14 +145,14 @@
       <button
         type="button"
         class="flex gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold rounded-lg transition"
-        [class.hidden]="editMode"
+        [class.hidden]="isEditing"
       >
         Mark as cooked
       </button>
       <button
         type="button"
         class="flex gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold rounded-lg transition"
-        [class.hidden]="!editMode"
+        [class.hidden]="!isEditing"
       >
         Save Changes
       </button>
@@ -158,7 +163,7 @@
       [ingredients]="availableIngredients"
       [currentIngredient]="ingredientDraft"
       [units]="units"
-      [(isOpen)]="editIngredient"
+      [(isOpen)]="isEditingIngredient"
       (remove)="removeIngredient()"
       (confirm)="updateIngredient()"
       (cancel)="sanitizeIngredients()"
