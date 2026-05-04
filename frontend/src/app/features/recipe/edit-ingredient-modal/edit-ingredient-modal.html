@@ -53,7 +53,7 @@
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Amount</label
               >
-              <app-spinner [step]="0.1"></app-spinner>
+              <app-spinner [(value)]="currentIngredient.quantity" [step]="0.1"></app-spinner>
             </div>
             <!-- Unit dropdown -->
             <div class="col-span-2 sm:col-span-1 mb-8">
@@ -64,7 +64,14 @@
               >
               <app-searchable-dropdown [options]="units"></app-searchable-dropdown>
             </div>
-            <div></div>
+            <!-- Delete Button -->
+            <button
+              class="block text-white bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700"
+              type="button"
+              (click)="removeIngredient()"
+            >
+              Delete
+            </button>
             <!-- Save Button -->
             <button
               class="block text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"

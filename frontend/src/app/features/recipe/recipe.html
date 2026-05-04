@@ -12,11 +12,18 @@
       <app-badge [text]="tag.name" />
     }
   </div>
+  <button
+    (click)="toggleEditMode()"
+    type="button"
+    class="flex gap-2 px-4 ml-4 py-2 bg-yellow-700 hover:bg-yellow-800 text-white text-sm font-semibold rounded-lg transition"
+  >
+    Edit
+  </button>
   <!-- Ingredients -->
   <h5 class="pt-16 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Ingredients</h5>
   <div class="flex flex-wrap items-center justify-between gap-y-4 pb-2">
     <h3 class="whitespace-nowrap mr-4">
-      for <span class="font-bold">{{ quantity }}</span> {{ recipe.unit.abbreviation }}
+      for <span class="font-bold">{{ quantity }}</span> {{ recipe.unit?.abbreviation }}
     </h3>
 
     <div class="flex grow sm:grow-0 w-full sm:w-auto rounded-md shadow-xs gap-2" role="group">
@@ -52,13 +59,15 @@
       <tbody>
         @for (ingredient of recipe.compositions; track ingredient.id; let isLast = $last) {
           <tr
-            class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
+            class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all"
             [class.border-b]="!isLast"
             [class.dark:border-gray-700]="!isLast"
             [class.border-gray-200]="!isLast"
           >
             <td class="px-6 py-4">
-              {{ ingredient.quantity * (quantity / recipe.quantity) }}
+              {{
+                editMode ? ingredient.quantity : ingredient.quantity * (quantity / recipe.quantity)
+              }}
               {{ ingredient.unit.abbreviation }}
             </td>
             <th
@@ -74,7 +83,7 @@
                   <div class="relative w-fit h-fit items-center" [class.hidden]="!editMode">
                     <button
                       type="button"
-                      (click)="editIngredient = true"
+                      (click)="openEditIngredientModal(ingredient)"
                       class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white ring-0 focus:outline-none focus:ring-0 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 transition-all"
                     >
                       <app-icon name="edit" fill="none" class="w-5 h-5"></app-icon>
@@ -91,12 +100,18 @@
       </tbody>
     </table>
   </div>
+  <div class="pt-4"></div>
+  <app-editable-instruction
+    [isAddButton]="true"
+    [class.hidden]="!editMode"
+    (click)="addIngredient()"
+  ></app-editable-instruction>
+
   <!-- Instructions -->
   <div class="min-h-[95dvh]">
     <h5 class="mb-2 pt-16 pb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
       Instructions
     </h5>
-
     <div class="grid grid-cols-1 gap-12">
       @for (instruction of recipe.instructions; track $index) {
         <app-editable-instruction
@@ -109,11 +124,10 @@
       }
       <app-editable-instruction
         [isAddButton]="true"
-        [class.hidden]="!editMode"
+        [class.hidden]="!editMode || recipe.instructions.length > 23"
         (click)="createInstruction()"
       ></app-editable-instruction>
     </div>
-
     <!-- Action Buttons -->
     <div class="inline-flex items-center justify-center w-full pt-32 pb-8">
       <button
@@ -130,29 +144,15 @@
       >
         Save Changes
       </button>
-      <button
-        (click)="toggleEditMode()"
-        type="button"
-        class="flex gap-2 px-4 ml-4 py-2 bg-yellow-700 hover:bg-yellow-800 text-white text-sm font-semibold rounded-lg transition"
-      >
-        Toggle Edit Mode
-      </button>
     </div>
-
-    <!-- Modal toggle -->
-    <button
-      class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      type="button"
-      (click)="toggleIngredientEditMode()"
-    >
-      Open Modal
-    </button>
 
     <!-- Edit Ingredient modal -->
     <app-edit-ingredient-modal
       [ingredients]="testIngredients"
+      [currentIngredient]="currentIngredient"
       [units]="testUnits"
       [(isOpen)]="editIngredient"
+      (remove)="removeIngredient($event)"
     ></app-edit-ingredient-modal>
   </div>
 </app-content-page-layout>

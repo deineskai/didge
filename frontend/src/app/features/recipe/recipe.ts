@@ -34,6 +34,7 @@ export class Recipe implements OnInit {
   quantity: number = 1;
   editMode: boolean = false;
   editIngredient: boolean = false;
+  currentIngredient: any | null = { name: 'Salt' };
   private cdr = inject(ChangeDetectorRef);
 
   constructor(
@@ -73,8 +74,10 @@ export class Recipe implements OnInit {
     this.editMode = !this.editMode;
   }
 
-  toggleIngredientEditMode() {
-    this.editIngredient = !this.editIngredient;
+  openEditIngredientModal(ingredient: any) {
+    this.currentIngredient = ingredient;
+    console.log('Current ingredient: ', ingredient);
+    this.editIngredient = true;
   }
 
   testIngredients = [
@@ -88,8 +91,39 @@ export class Recipe implements OnInit {
     'Lemon',
     'Mango',
     'Orange',
+    'Salt',
   ];
   testUnits: string[] = ['g', 'kg', 'ml', 'l', 'tsp', 'tbsp', 'to taste', 'pc', 'srv'];
+
+  addIngredient() {
+    const ingredient = {
+      id: 1,
+      contained_item: {
+        id: 1,
+        name: 'Salt',
+        unit: {
+          id: 1,
+          name: 'gram',
+          abbreviation: 'g',
+          conversion_factor: 1,
+          base_unit_id: null,
+        },
+      },
+      unit: {
+        id: 1,
+        name: 'gram',
+        abbreviation: 'g',
+        conversion_factor: 1,
+        base_unit_id: null,
+      },
+      quantity: 500.0,
+    };
+    this.recipe.compositions.push(ingredient);
+  }
+
+  removeIngredient(ingredient: any) {
+    this.recipe.ingredients = this.recipe.ingredients.filter((i: any) => i !== ingredient);
+  }
 
   createInstruction() {
     this.recipe.instructions.push({ step_number: 0, summary: '', Details: '' });

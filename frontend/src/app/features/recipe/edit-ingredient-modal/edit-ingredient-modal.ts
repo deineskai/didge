@@ -11,8 +11,10 @@ import { Spinner } from '../../../shared/components/spinner/spinner';
 export class EditIngredientModal {
   @Input() ingredients: string[] = [];
   @Input() units: string[] = [];
+  @Input() currentIngredient: any;
 
-  @Input() isOpen: boolean = false;
+  @Input() isOpen: boolean = true;
+  @Output() remove = new EventEmitter();
   @Output() isOpenChange = new EventEmitter<boolean>();
 
   close() {
@@ -22,5 +24,9 @@ export class EditIngredientModal {
 
   save() {
     this.close();
+  }
+
+  removeIngredient() {
+    this.remove.emit();
   }
 }
