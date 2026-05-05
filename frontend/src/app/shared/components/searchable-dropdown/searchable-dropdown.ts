@@ -21,7 +21,6 @@ export class SearchableDropdown<T = any> implements OnInit {
 
   @Input() bindLabel: string = ''; // Propertry to be shown
   @Input() bindValue: string = ''; // Property to be emitted / compared - if this is empty the whole object is returned / compared
-
   @Input() selectedValue: any = null;
   @Input() multiselect: boolean = false;
 
@@ -62,22 +61,27 @@ export class SearchableDropdown<T = any> implements OnInit {
 
   getSelectedLabel(): string {
     const placeholder = 'Select...';
+
     if (this.selectedValue === undefined || this.selectedValue === null) {
       return placeholder;
     }
 
-    // Multi-select
-    if (this.multiselect && Array.isArray(this.selectedValue)) {
-      const selectedOptions = this.options.filter((opt) =>
-        this.selectedValue.some((val: any) => this.deepEqual(this.getInternalValue(opt), val)),
-      );
+    return this.multiselect && Array.isArray(this.selectedValue)
+      ? this.getMultiselectLabel(placeholder)
+      : this.getSingleSelectLabel(placeholder);
+  }
 
-      return selectedOptions.length > 0
-        ? selectedOptions.map((opt) => this.getDisplayLabel(opt)).join(', ')
-        : placeholder;
-    }
+  private getMultiselectLabel(placeholder: string): string {
+    const selectedOptions = this.options.filter((opt) =>
+      (this.selectedValue as any[]).some((val) => this.deepEqual(this.getInternalValue(opt), val)),
+    );
 
-    // Single-select
+    return selectedOptions.length > 0
+      ? selectedOptions.map((opt) => this.getDisplayLabel(opt)).join(', ')
+      : placeholder;
+  }
+
+  private getSingleSelectLabel(placeholder: string): string {
     const selected = this.options.find((opt) =>
       this.deepEqual(this.getInternalValue(opt), this.selectedValue),
     );
@@ -115,30 +119,32 @@ export class SearchableDropdown<T = any> implements OnInit {
     const valueToSelect = this.getInternalValue(option);
 
     if (this.multiselect) {
-      const currentValues = Array.isArray(this.selectedValue) ? [...this.selectedValue] : [];
-
-      // Check if already selected
-      const index = currentValues.findIndex((val) => this.deepEqual(val, valueToSelect));
-
-      if (index !== -1) {
-        // Deselect if already selected
-        currentValues.splice(index, 1);
-      } else {
-        // Select if not selected
-        currentValues.push(valueToSelect);
-      }
-
-      this.selectedValue = currentValues;
+      this.performMultiSelect(valueToSelect);
     } else {
-      // Single-select
-      this.selectedValue = valueToSelect;
-      this.isOpen = false;
+      this.performSingleSelect(valueToSelect);
     }
 
     // Emit event & reset search
     this.selectedValueChange.emit(this.selectedValue);
     this.searchControl.setValue('', { emitEvent: false });
     this.filteredOptions = [...this.options];
+  }
+
+  private performMultiSelect(valueToSelect: any) {
+    const currentValues = Array.isArray(this.selectedValue) ? [...this.selectedValue] : [];
+    const index = currentValues.findIndex((val) => this.deepEqual(val, valueToSelect));
+
+    if (index !== -1) {
+      currentValues.splice(index, 1);
+    } else {
+      currentValues.push(valueToSelect);
+    }
+    this.selectedValue = currentValues;
+  }
+
+  private performSingleSelect(valueToSelect: any) {
+    this.selectedValue = valueToSelect;
+    this.isOpen = false;
   }
 
   toggle() {
