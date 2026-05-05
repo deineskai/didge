@@ -7,8 +7,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrl: './badge.css',
 })
 export class Badge {
-  @Input({ required: true }) text = 'Badge';
-  @Input({ required: true }) id: number = 0;
+  @Input() text = 'Badge';
+  @Input() id: number = 0;
   @Input() dismissible: boolean = false;
 
   @Output() dismiss = new EventEmitter();

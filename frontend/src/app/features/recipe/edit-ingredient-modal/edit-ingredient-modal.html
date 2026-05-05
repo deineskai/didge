@@ -2,7 +2,7 @@
 @if (isOpen) {
   <div class="fixed inset-0 z-50 flex items-center justify-center">
     <!-- Backdrop -->
-    <div class="absolute inset-0 bg-black/40" (click)="isOpen = false"></div>
+    <div class="absolute inset-0 bg-black/40" (click)="discard()"></div>
     <!-- Dialog -->
     <div class="relative p-4 w-full max-w-md max-h-full">
       <!-- Modal content -->
