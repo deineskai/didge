@@ -25,6 +25,10 @@ export class CulinaryService {
     return this.http.get(`${this.apiUrl}/culinary-units`);
   }
 
+  getTags(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/culinary-tags`);
+  }
+
   getIngredients(): Observable<any> {
     return this.http.get(`${this.apiUrl}/culinary-items/ingredients`);
   }

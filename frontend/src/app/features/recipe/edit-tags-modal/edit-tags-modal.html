@@ -31,19 +31,12 @@
               <app-input-label name="Tags"></app-input-label>
               <app-searchable-dropdown
                 [options]="tags"
-                [selectedValue]="tags"
+                [(selectedValue)]="selectedTags"
                 [multiselect]="true"
                 bindLabel="name"
               ></app-searchable-dropdown>
             </div>
-            <!-- Delete Button -->
-            <button
-              class="block text-white bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700"
-              type="button"
-              (click)="removeIngredient()"
-            >
-              Delete
-            </button>
+            <div></div>
             <!-- Confirm Button -->
             <button
               class="block text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"

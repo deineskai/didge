@@ -34,6 +34,7 @@ export class Recipe implements OnInit {
   quantity: number = 0;
   units: any = {};
   availableIngredients: any[] = [];
+  availableTags: any[] = [];
   isEditing: boolean = false;
   isEditingIngredient: boolean = false;
   isEditingTags: boolean = false;
@@ -63,6 +64,7 @@ export class Recipe implements OnInit {
     });
     this.loadUnits();
     this.loadAvailableIngredients();
+    this.loadAvailableTags();
   }
 
   loadRecipe(id: number) {
@@ -81,9 +83,19 @@ export class Recipe implements OnInit {
       next: (data) => {
         this.availableIngredients = data;
         this.cdr.detectChanges();
+        console.log('ingredients:', this.availableIngredients);
       },
     });
-    console.log(this.availableIngredients);
+  }
+
+  loadAvailableTags() {
+    this.culinaryService.getTags().subscribe({
+      next: (data) => {
+        this.availableTags = data;
+        this.cdr.detectChanges();
+        console.log('tags:', this.availableTags);
+      },
+    });
   }
 
   loadUnits() {
@@ -152,6 +164,11 @@ export class Recipe implements OnInit {
     this.recipe.tags = this.recipe.tags.filter((t: any) => {
       return t.id !== tag_id;
     });
+  }
+
+  updateTags(newTags: any[]) {
+    console.log('new tags', newTags);
+    this.recipe.tags = newTags;
   }
 
   openEditTagsModal() {

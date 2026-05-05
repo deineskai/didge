@@ -163,9 +163,10 @@
 
     <!-- Edit Tags Modal -->
     <app-edit-tags-modal
-      [tags]="recipe.tags"
-      [availableTags]="recipe.tags"
+      [tags]="availableTags"
+      [selectedTags]="recipe.tags"
       [(isOpen)]="isEditingTags"
+      (confirm)="updateTags($event)"
     ></app-edit-tags-modal>
 
     <!-- Edit Ingredient modal -->
