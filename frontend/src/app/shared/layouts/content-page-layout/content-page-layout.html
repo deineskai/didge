@@ -81,6 +81,7 @@
   <!-- Emoji Page Icon and Picker -->
   <app-page-icon-emoji
     [emojiId]="emojiId"
+    [isEditable]="isEditing"
     [adjustForCoverImage]="coverImageSource != null"
   ></app-page-icon-emoji>
 
@@ -88,7 +89,15 @@
   <div class="h-8"></div>
   <div class="sticky top-0 bg-gray-50 dark:bg-gray-900 pb-6 flex items-center justify-between">
     <!-- Page Title -->
-    <h1 class="text-2xl font-bold">{{ title }}</h1>
+    @if (isEditing) {
+      <app-editable-text
+        [(ngModel)]="title"
+        placeholder="Add title..."
+        textareaClass="!text-2xl font-bold"
+      ></app-editable-text>
+    } @else {
+      <h1 class="text-2xl font-bold">{{ title }}</h1>
+    }
     <!-- Page Actions (e.g. Buttons)-->
     <div class="flex items-center gap-2">
       <ng-content select="[pageActions]"></ng-content>

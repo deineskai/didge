@@ -14,6 +14,7 @@ export class PageIconEmoji {
   blockScrollStrategy: ScrollStrategy;
   @Input() emojiId: string | null = null;
   @Input() adjustForCoverImage: boolean = false;
+  @Input() isEditable: boolean = false;
 
   constructor(
     private overlay: Overlay,
@@ -37,5 +38,11 @@ export class PageIconEmoji {
     if (!emojiData || !emojiData.unified) return '';
     const unicode = emojiData.unified.toLowerCase();
     return `https://abs.twimg.com/emoji/v2/svg/${unicode}.svg`;
+  }
+
+  openPickerIfEditable() {
+    if (this.isEditable) {
+      this.showEmojiPicker = true;
+    }
   }
 }

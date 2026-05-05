@@ -7,7 +7,7 @@
       [class.-translate-y-22]="adjustForCoverImage"
       cdkOverlayOrigin
       #trigger="cdkOverlayOrigin"
-      (click)="showEmojiPicker = !showEmojiPicker"
+      (click)="openPickerIfEditable()"
     >
       <!-- Eomji / Icon -->
       <div class="emoji-container" style="width: 72px; height: 72px">

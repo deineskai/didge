@@ -1,5 +1,6 @@
 <app-content-page-layout
   [title]="recipe.name"
+  [isEditing]="isEditing"
   [emojiId]="recipe.icon_id"
   [coverImageSource]="recipe.image_url ? recipe.image_url : null"
 >
