@@ -3,13 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CulinaryService } from '../../core/culinary-service';
 import { ContentPageLayout } from '../../shared/layouts/content-page-layout/content-page-layout';
-import { Badge } from '../../shared/components/badge/badge';
-import { EditableInstruction } from '../../shared/components/editable-instruction/editable-instruction';
-import { Icon } from '../../shared/components/icon/icon';
-import { EditIngredientModal } from './edit-ingredient-modal/edit-ingredient-modal';
-import { Spinner } from '../../shared/components/spinner/spinner';
 import { SearchableDropdown } from '../../shared/components/searchable-dropdown/searchable-dropdown';
-import { InputLabel } from '../../shared/components/input-label/input-label';
+import { EditableInstruction } from '../../shared/components/editable-instruction/editable-instruction';
+import { Badge } from '../../shared/components/badge/badge';
+import { Icon } from '../../shared/components/icon/icon';
+import { Spinner } from '../../shared/components/spinner/spinner';
+import { EditIngredientModal } from './edit-ingredient-modal/edit-ingredient-modal';
+import { EditTagsModal } from './edit-tags-modal/edit-tags-modal';
 
 @Component({
   selector: 'app-recipe',
@@ -23,7 +23,7 @@ import { InputLabel } from '../../shared/components/input-label/input-label';
     EditIngredientModal,
     Spinner,
     SearchableDropdown,
-    InputLabel,
+    EditTagsModal,
   ],
   templateUrl: './recipe.html',
   styleUrl: './recipe.css',
@@ -36,6 +36,7 @@ export class Recipe implements OnInit {
   availableIngredients: any[] = [];
   isEditing: boolean = false;
   isEditingIngredient: boolean = false;
+  isEditingTags: boolean = false;
   currentIngredient: any | null = { name: 'Salt' };
   ingredientDraft: any = {};
   private cdr = inject(ChangeDetectorRef);
@@ -113,10 +114,6 @@ export class Recipe implements OnInit {
     this.currentIngredient = ingredient;
     this.ingredientDraft = structuredClone(this.currentIngredient);
     this.isEditingIngredient = true;
-    console.log({
-      currentIndgredient: this.ingredientDraft,
-      ingredients: this.availableIngredients,
-    });
   }
 
   updateIngredient() {
@@ -155,5 +152,9 @@ export class Recipe implements OnInit {
     this.recipe.tags = this.recipe.tags.filter((t: any) => {
       return t.id !== tag_id;
     });
+  }
+
+  openEditTagsModal() {
+    this.isEditingTags = true;
   }
 }

@@ -16,6 +16,9 @@
         (dismiss)="deleteTag($event)"
       />
     }
+    @if (isEditing) {
+      <app-badge text="+ Add" (click)="openEditTagsModal()" class="hover:cursor-pointer" />
+    }
   </div>
   <button
     (click)="toggleEditMode()"
@@ -157,6 +160,13 @@
         Save Changes
       </button>
     </div>
+
+    <!-- Edit Tags Modal -->
+    <app-edit-tags-modal
+      [tags]="recipe.tags"
+      [availableTags]="recipe.tags"
+      [(isOpen)]="isEditingTags"
+    ></app-edit-tags-modal>
 
     <!-- Edit Ingredient modal -->
     <app-edit-ingredient-modal

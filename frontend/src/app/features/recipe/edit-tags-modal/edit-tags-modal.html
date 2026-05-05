@@ -1,0 +1,60 @@
+<!-- Add friend modal -->
+@if (isOpen) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/40" (click)="discard()"></div>
+    <!-- Dialog -->
+    <div class="relative p-4 w-full max-w-md max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-800">
+        <!-- Modal header -->
+        <div
+          class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200"
+        >
+          <!-- Heading -->
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Edit Tags</h3>
+          <!-- Discard Button (X) -->
+          <button
+            type="button"
+            (click)="discard()"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          >
+            <app-icon name="close" class="w-3 h-3"></app-icon>
+            <span class="sr-only">Discard Changes</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <form class="p-4 md:p-5 z-100">
+          <div class="grid gap-4 grid-cols-2">
+            <!-- Tag Multiselect -->
+            <div class="col-span-2 mb-8">
+              <app-input-label name="Tags"></app-input-label>
+              <app-searchable-dropdown
+                [options]="tags"
+                [selectedValue]="tags"
+                [multiselect]="true"
+                bindLabel="name"
+              ></app-searchable-dropdown>
+            </div>
+            <!-- Delete Button -->
+            <button
+              class="block text-white bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700"
+              type="button"
+              (click)="removeIngredient()"
+            >
+              Delete
+            </button>
+            <!-- Confirm Button -->
+            <button
+              class="block text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              type="button"
+              (click)="confirmChanges()"
+            >
+              Confirm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
