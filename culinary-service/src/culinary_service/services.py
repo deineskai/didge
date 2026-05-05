@@ -38,6 +38,54 @@ def get_culinary_item_by_id(db: Session, item_id: int):
     )
 
 
+def update_culinary_item(
+    db: Session, item_id: int, item_data: schemas.CulinaryItemRead
+):
+    db_item = (
+        db.query(models.CulinaryItem).filter(models.CulinaryItem.id == item_id).first()
+    )
+    if not db_item:
+        raise ValueError("Culinary item not found")
+
+    # Validate unit exists
+    if not db.query(models.CulinaryUnit).get(item_data.unit.id):
+        raise ValueError("Culinary unit not found")
+
+    # Validate and get tags
+    tag_ids = [tag.id for tag in item_data.tags]
+    tags = db.query(models.CulinaryTag).filter(models.CulinaryTag.id.in_(tag_ids)).all()
+    if len(tags) != len(tag_ids):
+        raise ValueError("One or more tags not found")
+
+    # Update basic fields
+    db_item.name = item_data.name
+    db_item.icon_id = item_data.icon_id
+    db_item.image_url = item_data.image_url
+    db_item.culinary_unit_id = item_data.unit.id
+    db_item.quantity = item_data.quantity
+    db_item.tags = tags
+
+    # Delete and recreate compositions (ingredients)
+    db.query(models.CulinaryItemComposition).filter(
+        models.CulinaryItemComposition.containing_item_id == db_item.id
+    ).delete()
+
+    # Delete and recreate instructions
+    db.query(models.CulinaryInstruction).filter(
+        models.CulinaryInstruction.item_id == db_item.id
+    ).delete()
+
+    # Delete old diet flags
+    db.query(models.DietFlag).filter(models.DietFlag.item_id == db_item.id).delete()
+
+    # Process new extensions
+    process_item_extensions_from_read(db, db_item, item_data)
+
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+
 def get_base_ingredients(db: Session):
     return (
         db.query(models.CulinaryItem)
@@ -114,35 +162,80 @@ def init_culinary_item(
 def process_item_extensions(
     db: Session, db_item: models.CulinaryItem, item_data: schemas.CulinaryItemCreate
 ):
-    if item_data.ingredients:
-        add_ingredients(db_item, item_data.ingredients, db)
-        add_diets(db_item, item_data.ingredients, db)
+    if item_data.compositions:
+        add_compositions(db_item, item_data.compositions, db)
+        add_diets(db_item, item_data.compositions, db)
 
     if item_data.instructions:
         add_instructions(db_item, item_data.instructions, db)
 
 
-def add_ingredients(
+def process_item_extensions_from_read(
+    db: Session, db_item: models.CulinaryItem, item_data: schemas.CulinaryItemRead
+):
+    if item_data.compositions:
+        add_compositions_from_read(db_item, item_data.compositions, db)
+        add_diets_from_read(db_item, item_data.compositions, db)
+
+    if item_data.instructions:
+        add_instructions(db_item, item_data.instructions, db)
+
+
+def add_compositions(
     containing_item: models.CulinaryItem,
-    ingredients: list[models.ItemCompositionSchema],
+    compositions: list,
     db: Session,
 ):
-    for ingredient in ingredients:
+    for composition in compositions:
         item = models.CulinaryItemComposition(
             containing_item_id=containing_item.id,
-            contained_item_id=ingredient.contained_item_id,
-            unit_id=ingredient.unit_id,
-            quantity=ingredient.quantity,
+            contained_item_id=composition.contained_item_id,
+            unit_id=composition.unit_id,
+            quantity=composition.quantity,
+        )
+        db.add(item)
+
+
+def add_compositions_from_read(
+    containing_item: models.CulinaryItem,
+    compositions: list,
+    db: Session,
+):
+    for composition in compositions:
+        item = models.CulinaryItemComposition(
+            containing_item_id=containing_item.id,
+            contained_item_id=composition.contained_item.id,
+            unit_id=composition.unit.id,
+            quantity=composition.quantity,
         )
         db.add(item)
 
 
 def add_diets(
     containing_item: models.CulinaryItem,
-    ingredients: list[models.ItemCompositionSchema],
+    compositions: list,
     db: Session,
 ):
-    item_ids = [ing.contained_item_id for ing in ingredients]
+    item_ids = [comp.contained_item_id for comp in compositions]
+    db_ingredients = (
+        db.query(models.CulinaryItem).filter(models.CulinaryItem.id.in_(item_ids)).all()
+    )
+
+    diets = models.DietFlag(
+        item_id=containing_item.id,
+        vegan=all(ing.diets.vegan for ing in db_ingredients),
+        vegetarian=all(ing.diets.vegetarian for ing in db_ingredients),
+        gluten_free=all(ing.diets.gluten_free for ing in db_ingredients),
+    )
+    db.add(diets)
+
+
+def add_diets_from_read(
+    containing_item: models.CulinaryItem,
+    compositions: list,
+    db: Session,
+):
+    item_ids = [comp.contained_item.id for comp in compositions]
     db_ingredients = (
         db.query(models.CulinaryItem).filter(models.CulinaryItem.id.in_(item_ids)).all()
     )

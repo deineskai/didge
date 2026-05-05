@@ -93,3 +93,13 @@ def add_culinary_item(
         return {"message": "Culinary item created successfully", "id": item.id}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.patch("/culinary-items/{item_id}", response_model=schemas.CulinaryItemRead)
+def update_culinary_item(
+    item_id: int, new_item: schemas.CulinaryItemUpdate, db: Session = Depends(get_db)
+):
+    try:
+        return services.update_culinary_item(db, item_id, new_item)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))

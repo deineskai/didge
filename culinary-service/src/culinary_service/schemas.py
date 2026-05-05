@@ -9,7 +9,7 @@ class CulinaryItemCreate(BaseModel):
     quantity: float
     tag_ids: list[int]
     instructions: list[CulinaryInstructionCreate] = []
-    ingredients: list[ItemCompositionCreate] = []
+    compositions: list[ItemCompositionCreate] = []
 
 
 class CulinaryTagCreate(BaseModel):
@@ -36,6 +36,12 @@ class ItemCompositionRead(BaseModel):
     quantity: float
 
 
+class ItemCompositionUpdate(BaseModel):
+    contained_item: IngredientRead  # TODO: ensure recursion limit
+    unit: CulinaryUnitRead
+    quantity: float
+
+
 class DietFlagRead(BaseModel):
     vegan: bool
     vegetarian: bool
@@ -55,6 +61,22 @@ class CulinaryItemRead(BaseModel):
     diets: DietFlagRead | None
     tags: list[CulinaryTagRead] = []
     compositions: list[ItemCompositionRead] = []
+    instructions: list[CulinaryInstructionRead] = []
+
+    class Config:
+        from_attributes = True
+
+
+class CulinaryItemUpdate(BaseModel):
+    id: int
+    name: str
+    icon_id: str | None
+    image_url: str | None
+    quantity: float
+    unit: CulinaryUnitRead
+    diets: DietFlagRead | None
+    tags: list[CulinaryTagRead] = []
+    compositions: list[ItemCompositionUpdate] = []
     instructions: list[CulinaryInstructionRead] = []
 
     class Config:
