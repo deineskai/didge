@@ -4,6 +4,7 @@
     <button
       type="button"
       class="absolute top-0 left-0 -translate-x-2 -translate-y-16 z-10 p-2"
+      [class.cursor-pointer]="isEditable"
       [class.-translate-y-22]="adjustForCoverImage"
       cdkOverlayOrigin
       #trigger="cdkOverlayOrigin"

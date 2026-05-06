@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Overlay, OverlayModule, ScrollStrategy } from '@angular/cdk/overlay';
 import { PickerComponent, PickerModule } from '@ctrl/ngx-emoji-mart';
 
@@ -15,6 +15,7 @@ export class PageIconEmoji {
   @Input() emojiId: string | null = null;
   @Input() adjustForCoverImage: boolean = false;
   @Input() isEditable: boolean = false;
+  @Output() emojiIdChange = new EventEmitter<string | null>();
 
   constructor(
     private overlay: Overlay,
@@ -31,6 +32,7 @@ export class PageIconEmoji {
 
   setEmoji(event: any) {
     this.emojiId = event.emoji.id;
+    this.emojiIdChange.emit(this.emojiId);
   }
 
   getEmojiSvgUrl(id: string): string {

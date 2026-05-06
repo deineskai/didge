@@ -35,6 +35,7 @@ export class CulinaryService {
 
   getDietsAsStrings(recipe: any): string[] {
     const diets = recipe.diets;
+    if (diets === null) return [];
 
     let keys = Object.keys(diets).filter((key) => diets[key] === true);
 
@@ -43,6 +44,25 @@ export class CulinaryService {
     }
 
     return keys.map((key) => this.formatDietName(key));
+  }
+
+  updateCulinaryItem(new_item: any): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/culinary-items/${new_item.id}`, new_item);
+  }
+
+  createRecipe(): Observable<any> {
+    const new_item = {
+      name: 'New Recipe',
+      culinary_unit_id: 6, // serving
+      quantity: 2,
+      tag_ids: [],
+      icon_id: 'page_with_curl',
+      image_url:
+        'https://images.unsplash.com/photo-1495461199391-8c39ab674295?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      instructions: [],
+      compositions: [],
+    };
+    return this.http.post(`${this.apiUrl}/culinary-items`, new_item);
   }
 
   formatDietName(key: string): string {

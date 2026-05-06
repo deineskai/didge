@@ -1,7 +1,7 @@
 <div
   class="relative flex justify-between border-0 border-dashed border-gray-300 dark:border-gray-500 rounded-lg transition-all hover:border-gray-600 dark:hover:border-white text-gray-300 dark:text-gray-500 hover:text-gray-600 dark:hover:text-white"
   [class.justify-center]="isAddButton"
-  [ngClass]="editMode || isAddButton ? 'border-2   p-6  ' : ''"
+  [ngClass]="editMode || isAddButton ? 'border-2 p-6 cursor-pointer' : ''"
 >
   @if (isAddButton) {
     <svg

@@ -1,13 +1,15 @@
 <app-content-page-layout
-  [title]="recipe.name"
-  [isEditing]="isEditing"
-  [emojiId]="recipe.icon_id"
+  [(title)]="recipe.name"
+  [(isEditing)]="isEditing"
+  [(emojiId)]="recipe.icon_id"
   [coverImageSource]="recipe.image_url ? recipe.image_url : null"
 >
   <!-- Tags -->
   <div class="flex flex-wrap w-full items-center gap-2 pb-8">
-    @for (diet of diets; track $index) {
-      <app-badge [text]="diet" [id]="$index" />
+    @if (!isEditing) {
+      @for (diet of diets; track $index) {
+        <app-badge [text]="diet" [id]="$index" />
+      }
     }
     @for (tag of recipe.tags; track tag.id) {
       <app-badge
@@ -21,13 +23,6 @@
       <app-badge text="+ Add" (click)="openEditTagsModal()" class="hover:cursor-pointer" />
     }
   </div>
-  <button
-    (click)="toggleEditMode()"
-    type="button"
-    class="flex gap-2 px-4 ml-4 py-2 bg-yellow-700 hover:bg-yellow-800 text-white text-sm font-semibold rounded-lg transition"
-  >
-    Edit
-  </button>
   <!-- Ingredients -->
   <div>
     <h5 class="pt-16 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -42,7 +37,6 @@
         <app-spinner
           [(value)]="quantity"
           [min]="1"
-          [step]="1"
           [adaptive]="true"
           class="flex-1 max-w-none sm:max-w-40"
         ></app-spinner>
@@ -140,12 +134,12 @@
       }
       <app-editable-instruction
         [isAddButton]="true"
-        [class.hidden]="!isEditing || recipe.instructions.length > 23"
+        [class.hidden]="!isEditing || recipe.instructions?.length > 23"
         (click)="createInstruction()"
       ></app-editable-instruction>
     </div>
     <!-- Action Buttons -->
-    <div class="inline-flex items-center justify-center w-full pt-32 pb-8">
+    <div class="inline-flex items-center justify-center w-full pt-32 pb-8 gap-2">
       <button
         type="button"
         class="flex gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold rounded-lg transition"
@@ -155,6 +149,15 @@
       </button>
       <button
         type="button"
+        (click)="discardChanges()"
+        class="flex gap-2 px-4 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-semibold rounded-lg transition"
+        [class.hidden]="!isEditing"
+      >
+        Discard Changes
+      </button>
+      <button
+        type="button"
+        (click)="saveChanges()"
         class="flex gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold rounded-lg transition"
         [class.hidden]="!isEditing"
       >

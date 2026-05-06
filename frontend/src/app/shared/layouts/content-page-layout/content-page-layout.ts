@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, inject } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LayoutService } from '../../layout-service';
 import { RoundButton } from '../../components/round-button/round-button';
@@ -15,13 +15,24 @@ import { EditableText } from '../../components/editable-text/editable-text';
 export class ContentPageLayout {
   layoutService = inject(LayoutService);
   isScrolled = window.scrollY > 0;
+  isMoreMenuOpen: boolean = false;
   @Input() title: string = 'Page Title';
   @Input() coverImageSource: string | null = null;
   @Input() emojiId: string | null = null;
   @Input() isEditing: boolean = false;
 
+  @Output() titleChange = new EventEmitter<string>();
+  @Output() emojiIdChange = new EventEmitter<string | null>();
+  @Output() isEditingChange = new EventEmitter<boolean>();
+
   @HostListener('window:scroll', [])
   onWindowScroll() {
     this.isScrolled = window.scrollY > 0;
+  }
+
+  enableEditMode() {
+    this.isEditing = true;
+    this.isEditingChange.emit(true);
+    this.isMoreMenuOpen = false;
   }
 }

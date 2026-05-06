@@ -64,6 +64,7 @@
       <app-round-button
         [transparent]="coverImageSource === null || isScrolled"
         class="transition-none"
+        (click)="isMoreMenuOpen = !isMoreMenuOpen"
       >
         <app-icon
           name="more"
@@ -72,6 +73,37 @@
           [stroke]="coverImageSource != null && !isScrolled ? '#fff' : 'currentColor'"
         />
       </app-round-button>
+      <!-- Dropdown menu -->
+      <div
+        id="dropdownMore"
+        [class.hidden]="!isMoreMenuOpen"
+        class="z-10 absolute top-12 right-6 bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-800 dark:divide-gray-600"
+      >
+        <ul
+          class="py-2 text-sm text-gray-700 dark:text-gray-200"
+          aria-labelledby="dropdownMenuIconButton"
+        >
+          <li>
+            <a
+              (click)="enableEditMode()"
+              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white transition-all cursor-pointer"
+              >Edit</a
+            >
+          </li>
+          <li>
+            <a
+              class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white transition-all cursor-pointer"
+              >Placeholder</a
+            >
+          </li>
+        </ul>
+        <div class="py-2">
+          <a
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white cursor-pointer"
+            >Separated link</a
+          >
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -83,6 +115,7 @@
     [emojiId]="emojiId"
     [isEditable]="isEditing"
     [adjustForCoverImage]="coverImageSource != null"
+    (emojiIdChange)="emojiIdChange.emit($event)"
   ></app-page-icon-emoji>
 
   <!-- Page Title and Actions -->
@@ -92,6 +125,7 @@
     @if (isEditing) {
       <app-editable-text
         [(ngModel)]="title"
+        (ngModelChange)="titleChange.emit($event)"
         placeholder="Add title..."
         textareaClass="!text-2xl font-bold"
       ></app-editable-text>

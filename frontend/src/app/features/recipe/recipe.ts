@@ -30,8 +30,9 @@ import { EditTagsModal } from './edit-tags-modal/edit-tags-modal';
 })
 export class Recipe implements OnInit {
   recipe: any = {};
+  original_recipe: any = {};
   diets: string[] = [];
-  quantity: number = 0;
+  quantity: number = 1;
   units: any = {};
   availableIngredients: any[] = [];
   availableTags: any[] = [];
@@ -61,6 +62,7 @@ export class Recipe implements OnInit {
       if (id) {
         this.loadRecipe(id);
       }
+      this.isEditing = Boolean(params.get('editMode'));
     });
     this.loadUnits();
     this.loadAvailableIngredients();
@@ -70,12 +72,17 @@ export class Recipe implements OnInit {
   loadRecipe(id: number) {
     this.culinaryService.getRecipeById(id).subscribe({
       next: (data) => {
-        this.recipe = data;
-        this.quantity = this.recipe.quantity;
-        this.diets = this.culinaryService.getDietsAsStrings(this.recipe);
-        this.cdr.detectChanges();
+        this.loadRecipeWithProperties(data);
       },
     });
+  }
+
+  loadRecipeWithProperties(recipe: any) {
+    this.recipe = recipe;
+    this.original_recipe = structuredClone(recipe);
+    this.quantity = this.recipe.quantity;
+    this.diets = this.culinaryService.getDietsAsStrings(this.recipe);
+    this.cdr.detectChanges();
   }
 
   loadAvailableIngredients() {
@@ -173,5 +180,21 @@ export class Recipe implements OnInit {
 
   openEditTagsModal() {
     this.isEditingTags = true;
+  }
+
+  saveChanges() {
+    console.log('Saving item:', this.recipe);
+    this.recipe.quantity = this.quantity;
+    this.culinaryService.updateCulinaryItem(this.recipe).subscribe({
+      next: (data) => {
+        this.loadRecipeWithProperties(data);
+      },
+    });
+    this.toggleEditMode();
+  }
+
+  discardChanges() {
+    this.loadRecipeWithProperties(structuredClone(this.original_recipe));
+    this.toggleEditMode();
   }
 }
